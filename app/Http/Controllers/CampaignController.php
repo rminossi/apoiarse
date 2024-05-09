@@ -71,7 +71,6 @@ class CampaignController extends Controller
                 ]);
             }
         }
-        $this->donations_create(0, $campaign->q_donations, $campaign->id, $campaign->price);
 
         return redirect()->route('admin.campaigns.index', [
             'campaigns' => $campaign->id
