@@ -1,0 +1,40 @@
+.message {
+  -webkit-border-radius: $radius-normal;
+  -moz-border-radius: $radius-normal;
+  border-radius: $radius-normal;
+  width: 100%;
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  background: #555555;
+  color: #ffffff;
+  font-size: 0.875em;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
+  transition-duration: $hover-duration;
+  margin-bottom: 20px;
+  border: 1px solid #333333;
+
+  p {
+    flex-basis: 100%;
+    width: 100%;
+    display: block;
+  }
+}
+
+@mixin message($class, $color) {
+  color: #ffffff;
+  background-color: $color;
+
+  @if $button-hover-type == "darken" {
+    border-color: darken($color, $button-hover-amount);
+  } @else {
+    border-color: lighten($color, $button-hover-amount);
+  }
+}
+
+@each $color, $value in $theme-colors {
+  .message-#{$color} {
+    @include message($color, $value);
+  }
+}

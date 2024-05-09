@@ -1,0 +1,165 @@
+/** COLOR's DEFAULT **/
+/** LOGIN - LEFT */
+/** LOGIN - RIGHT */
+/** DASH - SIDEBAR */
+/** DASH - CONTENT */
+/** DASH - RWD */
+/**
+FONT SYSTEM
+ */
+/**
+COLOR SYSTEM
+ */
+/** Auto generate buttons, gradients */
+/**
+RADIUS SYSTEM
+ */
+/**
+INDEX SYSTEM
+ */
+* {
+  font-family: "Open Sans", sans-serif;
+}
+
+/** CONFIG */
+html, body {
+  min-height: 100vh;
+}
+
+/** SCREEN */
+.dash_login {
+  display: flex;
+  flex-wrap: nowrap;
+  min-height: 100vh;
+}
+
+/** LEFT */
+.dash_login_left {
+  flex-basis: 40%;
+  background: #A8B0BDFF;
+  color: #3c3a1e;
+  background-size: cover;
+  padding: 30px 0;
+  box-shadow: 3px 0px 10px 5px #CCC;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.dash_login_left_box {
+  background: #A8B0BDFF;
+  width: 500px;
+  max-width: 90%;
+  margin: auto;
+  padding: 30px;
+  align-items: center;
+}
+.dash_login_left_box .dash_login_box_headline h1 {
+  font-size: 2em;
+  text-align: center;
+}
+.dash_login_left_box .dash_login_box_headline_logo {
+  color: #F4645F;
+  text-align: center;
+  font-size: 3em;
+}
+.dash_login_left_box form {
+  display: block;
+  margin: 30px 0;
+}
+.dash_login_left_box label {
+  display: block;
+  margin-bottom: 30px;
+}
+.dash_login_left_box label .field {
+  font-size: 0.875em;
+  display: block;
+  font-weight: bold;
+}
+.dash_login_left_box input {
+  border: none;
+  border-bottom: 1px solid #FFFFFF;
+  font-size: 1em;
+  background: #A8B0BDFF !important;
+  color: #3c3a1e;
+  outline: none;
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 4px;
+  font-weight: 300;
+}
+.dash_login_left_box input::-moz-placeholder {
+  color: #FFFFFF;
+}
+.dash_login_left_box input:-ms-input-placeholder {
+  color: #FFFFFF;
+}
+.dash_login_left_box input::-ms-input-placeholder {
+  color: #FFFFFF;
+}
+.dash_login_left_box input::placeholder {
+  color: #FFFFFF;
+}
+.dash_login_left_box input:not([type=radio]):not([type=checkbox]) {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0px;
+}
+.dash_login_left_box button {
+  font-size: 0.875em;
+  display: block;
+  cursor: pointer;
+  width: 100%;
+  padding: 15px;
+  border: none;
+  color: #ffffff;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
+}
+.dash_login_left_box footer {
+  font-size: 0.8em;
+  text-align: center;
+  font-weight: 300;
+}
+.dash_login_left_box footer a {
+  color: #FFFFFF;
+  text-decoration: none;
+}
+.dash_login_left_box footer a:hover {
+  text-decoration: underline;
+}
+.dash_login_left_box footer p {
+  margin: 0px;
+}
+.dash_login_left_box footer p.dash_login_left_box_support {
+  margin-top: 10px;
+}
+.dash_login_left_box footer p.dash_login_left_box_support a {
+  text-decoration: none;
+}
+
+/** RIGHT */
+.dash_login_right {
+  flex-basis: 60%;
+  background: url("../images/login.svg") center/cover no-repeat;
+  padding: 30px 0;
+  background-size: 60%;
+}
+
+/** RESPONSIVE */
+@media (max-width: 66em) {
+  .dash_login_right {
+    display: none;
+  }
+
+  .dash_login_left {
+    flex-basis: 100%;
+  }
+}
+@media (max-width: 40em) {
+  .dash_login_left_box {
+    width: 100%;
+  }
+}

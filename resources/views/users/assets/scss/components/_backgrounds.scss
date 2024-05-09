@@ -1,0 +1,33 @@
+@each $color, $value in $theme-colors {
+  .bg-#{$color} {
+    background-color: $value;
+  }
+}
+
+.bg-body {
+  background-color: $dash-background;
+}
+
+.bg-white {
+  background-color: $color-white;
+}
+
+.bg-gray-light {
+  background-color: $color-gray-light;
+}
+
+.bg-gray-medium {
+  background-color: $color-gray-medium;
+}
+
+.bg-gray {
+  background-color: $color-gray;
+}
+
+.bg-gray-dark {
+  background-color: $color-gray-dark;
+}
+
+.bg-black {
+  background-color: $color-black;
+}

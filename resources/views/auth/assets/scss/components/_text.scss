@@ -1,0 +1,41 @@
+@each $color, $value in $theme-colors {
+  .text-#{$color} {
+    color: $value !important;
+  }
+
+  a.text-#{$color} {
+    color: $value !important;
+
+    &:hover {
+      @if $button-hover-type == "darken" {
+        color: darken($value, $button-hover-amount) !important;
+      } @else {
+        color: lighten($value, $button-hover-amount) !important;
+      }
+    }
+  }
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+.text-bold {
+  font-weight: $font-weight-bold;
+}
+
+.text-strike {
+  text-decoration: line-through;
+}

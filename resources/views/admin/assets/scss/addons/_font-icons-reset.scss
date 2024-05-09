@@ -1,0 +1,11 @@
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+  position: relative !important;
+  top: .125em !Important;
+  margin-right: .4em !Important;
+}
+
+.icon-notext:before {
+  top: 0;
+  margin-right: 0 !important;;
+}

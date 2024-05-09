@@ -1,0 +1,29 @@
+.app_collapse {
+  width: 100%;
+  flex-basis: 100%;
+
+  .app_collapse_header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: center;
+    font-size: $font-size-large;
+    border-bottom: 1px solid $color-gray;
+    margin-bottom: 20px;
+
+
+    h3 {
+      flex-basis: calc(100% - 50px);
+    }
+
+    span {
+      flex-basis: 30px;
+      font-size: 1em;
+      line-height: 2em;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

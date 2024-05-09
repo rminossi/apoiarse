@@ -1,0 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  text-rendering: geometricPrecision;
+}
+
+img {
+  max-width: 100%;
+}
+img a {
+  border: none;
+}
+
+ul {
+  list-style: none;
+}
+
+p {
+  margin: 0;
+}
+
+embed, video, iframe, iframe[style] {
+  max-width: 100%;
+  height: auto;
+}

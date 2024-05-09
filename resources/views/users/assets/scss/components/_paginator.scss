@@ -1,0 +1,53 @@
+/*DEFAULT PAGINATOR*/
+@mixin paginator($color-active, $color-active-hover, $color-inactive, $radius) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 30px auto;
+
+  a, span {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid $color-inactive;
+    border-right: 0;
+    color: $color-active;
+    font-weight: $font-weight-bold;
+    text-decoration: none;
+    transition-duration: 0.2s;
+  }
+
+  a {
+    &:first-of-type {
+      -webkit-border-radius: $radius 0 0 $radius;
+      -moz-border-radius: $radius 0 0 $radius;
+      border-radius: $radius 0 0 $radius;
+    }
+
+    &:last-of-type {
+      border-right: 1px solid $color-inactive;
+      -webkit-border-radius: 0 $radius $radius 0;
+      -moz-border-radius: 0 $radius $radius 0;
+      border-radius: 0 $radius $radius 0;
+    }
+
+    &:hover {
+      background: $color-active-hover;
+      background-size: 200%;
+      color: #FBFBFB;
+    }
+  }
+
+  span {
+    background: $color-inactive;
+  }
+}
+
+@if $button-hover-type == "darken" {
+  .paginator {
+    @include paginator($color-gray-medium, darken($color-green, $button-hover-amount), $color-gray-light, $radius-normal);
+  }
+} @else {
+  .paginator {
+    @include paginator($color-gray-medium, lighten($color-green, $button-hover-amount), $color-gray-light, $radius-normal);
+  }
+}

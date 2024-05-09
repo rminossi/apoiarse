@@ -1,0 +1,57 @@
+@import 'variables';
+
+* {
+  font-family: $font-family, sans-serif;
+}
+
+html, body {
+  background: $dash-background;
+}
+
+/** Parts of Page */
+@import "parts/sidebar";
+@import "parts/userbar";
+@import "parts/content_sidebar";
+@import "parts/search";
+
+/** Components not present in boot */
+@import "components/form";
+@import "components/paginator";
+@import "components/content_box";
+@import "components/nav";
+@import "components/collapse";
+@import "components/icons";
+@import "components/messages";
+
+/** CSS App */
+@import "apps/app_home";
+@import "apps/app_users";
+@import "apps/app_companies";
+@import "apps/app_realty";
+
+.no-content {
+  width: 100%;
+  flex-basis: 100%;
+  background-color: $dash-background;
+  color: $color-gray-medium;
+  justify-content: center;
+  align-content: center;
+  -webkit-border-radius: $radius-normal;
+  -moz-border-radius: $radius-normal;
+  border-radius: $radius-normal;
+  text-align: center;
+  padding: 20px;
+}
+
+/** RWD */
+@media (min-width: $dash-rwd-breakpoint-1) {
+  .on_mobile {
+    display: none !important;
+  }
+}
+
+@media (max-width: $dash-rwd-breakpoint-1) {
+  .no_mobile {
+    display: none !important;
+  }
+}

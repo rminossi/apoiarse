@@ -1,0 +1,85 @@
+.dash_content_search {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  z-index: $index-menu - 2;
+  position: fixed;
+  max-width: 320px;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  top: 0;
+  right: -320px;
+  background: $dash-sidebar-background;
+  padding: 20px;
+
+  header, main, .dash_content_search_close {
+    flex-basis: 100%;
+  }
+
+  header h3 {
+    color: #F3F3F3;
+    font-size: 1.2em;
+    font-weight: normal;
+    margin-bottom: 20px;
+  }
+
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+
+    label {
+      flex-basis: 100%;
+      color: #F3F3F3;
+      font-size: $font-size-small !important;
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+      font-weight: normal !important;
+
+      span, input {
+        flex-basis: 100%;
+      }
+
+      span {
+        margin-bottom: 4px;
+      }
+
+      input {
+        padding: 10px;
+        color: $color-gray-medium;
+        border: none;
+        -webkit-border-radius: $radius-normal;
+        -moz-border-radius: $radius-normal;
+        border-radius: $radius-normal;
+        font-size: 0.875em;
+        outline: none;
+        background-color: #F3F3F3;
+      }
+    }
+
+    .label_double {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      flex-basis: 100%;
+      width: 100%;
+
+      .label_50 {
+        flex-basis: calc(50% - 10px) !important;
+        display: flex;
+        flex-wrap: wrap;
+
+        span, input {
+          flex-basis: 100%;
+
+        }
+      }
+    }
+
+    button {
+      margin-top: 10px;
+    }
+  }
+}

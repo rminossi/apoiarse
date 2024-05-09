@@ -1,0 +1,129 @@
+.dataTables_length {
+  font-size: 0.875em;
+  color: $color-gray-medium !important;
+  margin-bottom: 20px;
+
+  select {
+    margin-right: 4px;
+  }
+}
+
+.dataTables_filter {
+  font-size: 0.875em;
+  margin-bottom: 20px;
+  color: $color-gray-medium !important;
+}
+
+.dataTable {
+  font-size: 0.875em !important;
+}
+
+.dataTables_wrapper {
+  width: calc(100% - 2px) !important;
+}
+
+.dataTables_info {
+  font-size: 0.875em;
+  margin-top: 20px;
+  color: $color-gray-medium !important;
+}
+
+.dataTables_paginate {
+  font-size: 0.875em;
+  margin-top: 20px;
+  color: $color-gray-medium !important;
+
+  .paginate_button {
+    border-radius: $radius-normal !important;
+
+    &.disabled {
+      background-color: $dash-background !important;
+      border: 1px solid darken($dash-background, $button-hover-amount) !important;
+      color: $color-gray-light !important;
+
+      &:hover {
+        cursor: normal !important;
+      }
+    }
+
+    &:not(.disabled):hover {
+      background: $color-orange !important;
+      color: $dash-background !important;
+      border: 1px solid darken($color-orange, $button-hover-amount) !important;
+    }
+
+    &.current {
+      background: $color-orange !important;
+      color: $dash-background !important;
+      border: 1px solid darken($color-orange, $button-hover-amount) !important;
+    }
+  }
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+  color: $dash-background !important;
+}
+
+table.dataTable.compact tbody th, table.dataTable.compact tbody td {
+  padding: 10px;
+}
+
+table.dataTable.dtr-inline.collapsed.compact>tbody>tr>td:first-child:before, table.dataTable.dtr-inline.collapsed.compact>tbody>tr>th:first-child:before {
+  top: 10px;
+}
+
+table.dataTable.dtr-inline.collapsed.compact>tbody>tr>td:first-child, table.dataTable.dtr-inline.collapsed.compact>tbody>tr>th:first-child {
+  padding-left: 30px;
+}
+
+table.dataTable>tbody>tr.child ul.dtr-details {
+  width: 100%;
+}
+
+table.dataTable tbody th, table.dataTable tbody td {
+  padding: 10px;
+}
+
+table.dataTable thead th, table.dataTable tfoot th {
+  text-align: left;
+}
+
+.dataTables_length select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font-size: $font-size-small;
+  -webkit-border-radius: $radius-normal;
+  -moz-border-radius: $radius-normal;
+  border-radius: $radius-normal;
+  min-width: 66px !important;
+  color: #000000;
+  padding: 8px;
+  background: #ffffff;
+  border: 1px solid #cccccc;
+  resize: none;
+  outline: none;
+
+  background-image: url("../images/selectarrow.png");
+  background-position: right 15px center;
+  background-repeat: no-repeat;
+  background-size: auto 20%;
+  margin-right: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font-size: $font-size-small;
+  -webkit-border-radius: $radius-normal;
+  -moz-border-radius: $radius-normal;
+  border-radius: $radius-normal;
+  color: #000000;
+  padding: 8px;
+  background: #ffffff;
+  border: 1px solid #cccccc;
+  resize: none;
+  outline: none;
+  margin-left: 10px;
+}

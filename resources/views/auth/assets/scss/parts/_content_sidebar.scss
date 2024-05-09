@@ -1,0 +1,42 @@
+.dash_content_sidebar {
+  flex-basis: 20%;
+
+  h3 {
+    font-size: $font-size-medium;
+    font-weight: $font-weight-light;
+  }
+
+  .dash_content_sidebar_desc {
+    font-size: $font-size-min;
+    font-weight: $font-weight-strong;
+    color: $color-primary;
+    margin-top: 15px;
+  }
+
+  nav {
+    display: block;
+    margin-top: 30px;
+
+    a {
+      margin-bottom: 10px;
+      display: block;
+      font-size: $font-size-small;
+      padding: 10px 0;
+      font-weight: bold;
+      color: #555555;
+    }
+
+    .active, a:hover {
+      background: #ffffff;
+      padding-left: 20px;
+    }
+  }
+}
+
+@media (max-width: $dash-rwd-breakpoint-2) {
+  .dash_content_sidebar {
+    order: 1;
+    flex-basis: 100%;
+    margin-bottom: 30px;
+  }
+}

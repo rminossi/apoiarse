@@ -1,0 +1,18 @@
+.gradient {
+  background-size: 200% auto;
+  transition-duration: 0.5s;
+
+  &:hover {
+    background-position: right center;
+  }
+}
+
+@each $color, $value in $theme-colors {
+  .gradient-#{$color} {
+    @if $gradient-hover-type == "darken" {
+      background-image: linear-gradient(to right, $value 0%, darken($value, $gradient-hover-amount) 50%, $value 100%);
+    } @else {
+      background-image: linear-gradient(to right, $value 0%, lighten($value, $gradient-hover-amount) 50%, $value 100%);
+    }
+  }
+}

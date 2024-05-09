@@ -1,0 +1,35 @@
+@each $size, $amount in $size {
+  @each $direction, $value in $directions {
+    .p#{$direction}-#{$size} {
+      padding#{$value}: $spacing * $amount;
+    }
+  }
+
+  .py-#{$size} {
+    margin: ($spacing * $amount) 0;
+  }
+
+  .px-#{$size} {
+    padding: 0 ($spacing * $amount);
+  }
+
+  .p-#{$size} {
+    padding: ($spacing * $amount);
+  }
+}
+
+@each $direction, $value in $directions {
+  .p#{$direction}-auto {
+    padding#{$value}: auto;
+  }
+}
+
+.py-auto {
+  padding-top: auto;
+  padding-bottom: auto;
+}
+
+.px-auto {
+  padding-left: auto;
+  padding-right: auto;
+}

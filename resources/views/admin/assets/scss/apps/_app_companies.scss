@@ -1,0 +1,26 @@
+.companies_list {
+  width: 100%;
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+
+  .companies_list_item {
+    flex-basis: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid $color-gray-light;
+    background-color: rgba(0,0,0,0.01);
+    -webkit-border-radius: $radius-normal;
+    -moz-border-radius: $radius-normal;
+    border-radius: $radius-normal;
+    overflow: hidden;
+    padding: 20px;
+    font-size: $font-size-small;
+
+    p {
+      flex-basis: 100%;
+      width: 100%;
+    }
+  }
+}

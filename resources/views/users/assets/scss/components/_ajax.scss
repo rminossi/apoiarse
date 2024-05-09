@@ -1,0 +1,121 @@
+.ajax_load {
+  z-index: $index-modal * 2;
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+
+  .ajax_load_box {
+    font-weight: $font-weight-bold;
+    margin: auto;
+    text-align: center;
+    color: #ffffff;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  }
+
+  .ajax_load_box_title {
+    margin-top: 15px;
+    font-weight: $font-weight-strong;
+  }
+
+  .ajax_load_box_circle {
+    border-top: 16px solid $color-orange !important;
+    border: 16px solid #e3e3e3;
+    border-radius: 50%;
+    margin: auto;
+    width: 80px;
+    height: 80px;
+    -webkit-animation: spin 1.2s linear infinite;
+    -o-animation: spin 1.2s linear infinite;
+    animation: spin 1.2s linear infinite;
+
+    @-webkit-keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+      }
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  }
+}
+
+.ajax_response {
+  z-index: $index-modal + 2;
+  position: fixed;
+  padding: 20px 20px 0 0;
+  top: 0;
+  right: 0;
+  width: 300px;
+  max-width: 100%;
+
+  .message {
+    background: $color-gray-dark;
+    font-size: $font-size-min;
+    font-weight: $font-weight-normal;
+    -webkit-border-radius: $radius-normal;
+    -moz-border-radius: $radius-normal;
+    border-radius: $radius-normal;
+    color: #ffffff;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 15px 15px 20px 15px;
+    margin-bottom: 15px;
+    position: relative;
+    cursor: pointer;
+
+    &:before {
+      flex-basis: 0%;
+      margin: -5px 15px 0 0 !important;
+      font-size: $font-size-max * 1.2;
+      color: rgba(0, 0, 0, 0.5);
+    }
+
+    &.success {
+      background: $color-green;
+    }
+
+    &.info {
+      background: $color-blue;
+    }
+
+    &.warning {
+      background: $color-yellow;
+    }
+
+    &.error {
+      background: $color-red;
+    }
+  }
+
+  .message_time {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 4%;
+    height: 5px;
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+@media (max-width: $dash-rwd-breakpoint-5) {
+  .ajax_response {
+    width: 100%;
+    padding: 20px 20px 0 20px;
+  }
+}

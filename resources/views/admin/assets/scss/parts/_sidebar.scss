@@ -1,0 +1,130 @@
+.dash_sidebar {
+  background: $dash-sidebar-background;
+  flex-basis: $dash-sidebar-width;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  .dash_sidebar_user {
+    background: $dash-sidebar-user-background;
+    padding: 20px 0;
+    text-align: center;
+
+    .dash_sidebar_user_thumb {
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      border-radius: 50%;
+      padding: 2px;
+      border: 2px solid #E3E3E3;
+      max-width: 30%;
+      min-width: 100px;
+      margin-bottom: 10px;
+    }
+
+    .dash_sidebar_user_name {
+      font-size: $font-size-normal;
+
+      a {
+        font-weight: 400;
+        text-decoration: none;
+        color: #F3F3F3;
+      }
+
+      a:hover {
+        color: #ffffff;
+      }
+    }
+  }
+
+  .dash_sidebar_nav_item {
+    display: block;
+    width: 100%;
+    position: relative;
+
+    a {
+      color: #999;
+      background: $color-primary;
+      font-size: $font-size-small;
+      display: block;
+      width: 100%;
+      padding: 15px 30px;
+
+      &:hover {
+        background: #59606b;
+        color: #ffffff;
+        border-left: 3px solid $color-orange;
+      }
+    }
+
+    &.active > a {
+      border-left: 3px solid $color-orange;
+      color: #FFF;
+    }
+
+    &.active a {
+      border-left: 3px solid $color-orange;
+    }
+
+    &.active a + .dash_sidebar_nav_submenu {
+      display: block;
+      border-left: none;
+
+      li.active {
+
+        a {
+          border-left: 3px solid $color-orange !important;
+          background: #59606b !important;
+          color: #FFF;
+        }
+      }
+    }
+
+    .dash_sidebar_nav_submenu {
+      border-left: 3px solid $color-orange;
+      display: none;
+
+      a {
+        background-color: $dash-sidebar-background !important;
+
+        &:hover {
+          background: #59606b;
+          color: #ffffff;
+          border-left: 6px solid $color-orange;
+        }
+      }
+    }
+
+    &:not(.active):hover .dash_sidebar_nav_submenu {
+      display: block;
+      background: #273B4A;
+      position: absolute;
+      width: 240px;
+      top: 0;
+      left: 100%;
+      z-index: 10000;
+    }
+
+  }
+}
+
+@media (max-width: $dash-rwd-breakpoint-1) {
+  .dash_sidebar {
+    z-index: $index-menu;
+    position: fixed;
+    max-width: 260px;
+    height: 100%;
+    overflow-y: auto;
+    top: 0;
+    left: -260px;
+
+    .dash_sidebar_nav_submenu {
+      display: block !important;
+    }
+
+    .dash_sidebar_nav_item:not(.active):hover .dash_sidebar_nav_submenu {
+      position: relative;
+      width: 100%;
+      left: 0;
+    }
+  }
+}

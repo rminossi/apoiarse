@@ -1,0 +1,35 @@
+.mce_upload {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: $index-modal;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.mce_upload_box {
+  margin: auto;
+  width: 400px;
+  max-width: 90%;
+  background: #FFFFFF;
+  padding: 30px;
+  text-align: center;
+
+  -webkit-border-radius: $radius-normal;
+  -moz-border-radius: $radius-normal;
+  border-radius: $radius-normal;
+}
+
+.mce_upload_box label.legend {
+  margin-bottom: 15px;
+}
+
+.mce_upload_box .btn {
+  width: 100%;
+}
+
+textarea.mce {
+  font-size: $font-size-small;
+}

@@ -1,0 +1,35 @@
+@each $size, $amount in $size {
+  @each $direction, $value in $directions {
+    .m#{$direction}-#{$size} {
+      margin#{$value}: $spacing * $amount !important;
+    }
+  }
+
+  .my-#{$size} {
+    margin: ($spacing * $amount) 0 !important;
+  }
+
+  .mx-#{$size} {
+    margin: 0 ($spacing * $amount) !important;
+  }
+
+  .m-#{$size} {
+    margin: ($spacing * $amount) !important;
+  }
+}
+
+@each $direction, $value in $directions {
+  .m#{$direction}-auto {
+    margin#{$value}: auto !important;
+  }
+}
+
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto !important;
+}
+
+.mx-auto {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}

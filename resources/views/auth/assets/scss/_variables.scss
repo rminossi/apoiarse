@@ -1,0 +1,123 @@
+$font-family: 'Open Sans';
+
+/** COLOR's DEFAULT **/
+$color-primary: #1a1f26;
+$color-secondary: #282f3a;
+
+/** LOGIN - LEFT */
+$dash-login-left-width: 40%;
+$dash-login-left-background: $color-secondary;
+$dash-login-left-box-background: $dash-login-left-background;
+$dash-login-left-input-background: $dash-login-left-background;
+$dash-login-left-color: #FFFFFF;
+
+/** LOGIN - RIGHT */
+$dash-login-right-width: 60%;
+$dash-login-right-background: url('../images/login.svg') center/cover no-repeat;
+
+/** DASH - SIDEBAR */
+$dash-sidebar-width: 280px;
+$dash-sidebar-background: $color-secondary;
+$dash-sidebar-user-background: $color-primary;
+
+/** DASH - CONTENT */
+$dash-content-color: #555555;
+$dash-content-box: 100%; // 72em | 100%
+$dash-background: #F3F3F3;
+
+/** DASH - RWD */
+$dash-rwd-breakpoint-1: 80em;
+$dash-rwd-breakpoint-2: 62em;
+$dash-rwd-breakpoint-3: 52em;
+$dash-rwd-breakpoint-4: 45em;
+$dash-rwd-breakpoint-5: 30em;
+
+/**
+FONT SYSTEM
+ */
+$font-size-min: 0.8em;
+$font-size-small: 0.875em;
+$font-size-normal: 1em;
+$font-size-medium: 1.2em;
+$font-size-large: 1.4em;
+$font-size-max: 2em;
+
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-strong: 600;
+$font-weight-bold: 700;
+$font-weight-black: 900;
+
+/**
+COLOR SYSTEM
+ */
+$color-white: #FFFFFF;
+$color-gray-light: #CCCCCC;
+$color-gray-medium: #555555;
+$color-gray: #999999;
+$color-gray-dark: #333333;
+$color-black: #000000;
+
+$color-green: #36BA9B;
+$color-blue: #39AED9;
+$color-yellow: #F5B946;
+$color-red: #D94352;
+$color-orange: #F4645F;
+
+$button-hover-type: 'darken'; // darken || lighten
+$button-hover-amount: 8%;
+
+$gradient-hover-type: 'darken'; // darken || lighten
+$gradient-hover-amount: 8%;
+
+/** Auto generate buttons, gradients */
+$theme-colors: () !default;
+$theme-colors: map_merge(
+  (
+    "green": $color-green,
+    "blue": $color-blue,
+    "yellow": $color-yellow,
+    "red": $color-red,
+    "orange": $color-orange
+  ), $theme-colors
+);
+
+$directions: () !default;
+$directions: map_merge(
+  (
+    "t": -top,
+    "r": -right,
+    "b": -bottom,
+    "l": -left
+  ), $directions
+);
+
+$size: () !default;
+$size: map_merge(
+  (
+    "0": 0,
+    "1": .25,
+    "2": .5,
+    "3": 1,
+    "4": 1.5,
+    "5": 3,
+  ), $size
+);
+
+$hover-duration: 0.3s;
+$spacing: 3rem;
+
+/**
+RADIUS SYSTEM
+ */
+$radius-normal: 4px;
+$radius-medium: 10px;
+$radius-large: 20px;
+
+/**
+INDEX SYSTEM
+ */
+$index-back: -1;
+$index-fold: 2;
+$index-menu: 3;
+$index-modal: 4;
