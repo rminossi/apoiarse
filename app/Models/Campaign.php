@@ -47,7 +47,7 @@ class Campaign extends Model
     public function setSlug()
     {
         if (!empty($this->title)) {
-            $this->attributes['slug'] = Str::slug(Campaign::class, 'slug', $this->title) . '-' . $this->id;
+            $this->attributes['slug'] = Str::slug($this->title, '-') . '-' . $this->id;
             $this->save();
         }
     }

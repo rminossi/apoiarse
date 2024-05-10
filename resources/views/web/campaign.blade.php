@@ -179,9 +179,7 @@
                                             </div>
 
                                         @else
-                                            <button class="col-md-2 btn btn-primary p-5 mt-3 btnLogin"
-                                                    type="button"><a href="{{ route('sessao.login', ['campaign' => $campaign->slug]) }}">Entrar para apoiar</a>
-                                            </button>
+                                                    <a class="col-md-8 btn btn-primary p-5 mt-3 btnLogin" href="{{ route('sessao.login', ['campaign' => $campaign->slug]) }}">Entrar para apoiar</a>
                                         @endif
                                     </div>
                                 </div>
