@@ -28,7 +28,7 @@
 					<div class="blog-text">
 						<div class="prod-title">
 							<h3><a href="" #>{{$campaign->title}}</a></h3>
-							<a href="{{route('web.campaign', ['slug' => $campaign->slug])}}" class="btn btn-primary">{{"Apoiar!"}}</a>
+							<a href="{{route('web.campaign', ['slug' => $campaign->slug])}}" class="btn btn-primary p-3 col-12">{{"Apoiar!"}}</a>
 						</div>
 					</div>
 				</div>
