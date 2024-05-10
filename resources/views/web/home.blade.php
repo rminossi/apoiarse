@@ -28,7 +28,6 @@
 					<div class="blog-text">
 						<div class="prod-title">
 							<h3><a href="" #>{{$campaign->title}}</a></h3>
-							<p>{!!html_entity_decode(substr($campaign->description, 0, 139))!!}</p>
 							<a href="{{route('web.campaign', ['slug' => $campaign->slug])}}" class="btn btn-primary">{{"Apoiar!"}}</a>
 						</div>
 					</div>
