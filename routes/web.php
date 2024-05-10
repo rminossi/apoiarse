@@ -31,6 +31,7 @@ Route::group(['namespace' => 'Web', 'as' => 'web.'], function () {
     Route::get('/minhas-doacoes', [WebController::class, 'minhasDoacoes'])->name('my-donations');
 });
 
+//only access if user is_admin
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/cancelReserve', [AuthController::class, 'cancelReserve'])->name('cancelReserve');
     Route::group(['middleware' => ['auth']], function () {
@@ -42,7 +43,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::delete('remove-image', [CampaignController::class, 'removeImage'])->name('campaigns.removeImage');
         Route::post('image-set-cover', [CampaignController::class, 'imageSetCover'])->name('campaigns.imageSetCover');
     });
-});
+})->middleware('admin');
 
 Route::group(['prefix' => 'usuario', 'as' => 'usuario.'], function () {
     Route::group(['middleware' => ['auth']], function () {

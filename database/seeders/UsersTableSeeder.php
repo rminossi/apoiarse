@@ -23,6 +23,7 @@ class UsersTableSeeder extends Seeder
             'password' => $password,
             'cpf' => '00000000000',
             'phone' => '0000000000',
+            'is_admin' => true,
         ]);
     }
 }
