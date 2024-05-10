@@ -117,6 +117,7 @@ figure {
 }
 @media screen and (max-width: 768px) {
   .fh5co-cover {
+    background-size: 100% 768px;
     heifght: inherit;
     padding: 3em 0;
   }
