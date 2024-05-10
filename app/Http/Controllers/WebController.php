@@ -110,7 +110,7 @@ class WebController extends Controller
             'message' => $request->message,
         ];
         Mail::send(new Contact($data));
-        return redirect()->route('contato');
+        return redirect()->route('web.contato');
         //return new Contact($data);
     }
 

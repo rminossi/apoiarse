@@ -15,15 +15,14 @@
 			<div class="container">
 			<form action="{{route('enviar-contato')}}" method="POST">
 					@csrf
-                @isset($site)
 					<div class="row">
 						<div class="col-md-6">
 							<h3 class="section-title">Onde Estamos,</h3>
 							<ul class="contact-info">
 								<li><i class="icon-location-pin"></i>Torres, RS</li>
-                                <li><i class="icon-phone2"></i><a target="_blank" href="https://api.whatsapp.com/send?phone=5551980436739">{{$site->phone}}</a></li>
-								<li><i class="icon-mail"></i><a target="_blank" href="mailto:rafaelminossi@gmail.com">{{$site->email}}</a></li>
-								<li><i class="icon-instagram"></i><a target="_blank" href="https://www.instagram.com/_sorteios_todo_dia_">www.instagram.com/_sorteios_todo_dia_</a></li>
+                                <li><i class="icon-phone2"></i><a target="_blank" href="https://api.whatsapp.com/send?phone=5551980436739">(51) 98043-6739 (WhatsApp)</a></li>
+								<li><i class="icon-mail"></i><a target="_blank" href="mailto:contato@apoiar-se.online">contato@apoiar-se.online</a></li>
+								<li><i class="icon-instagram"></i><a target="_blank" href="https://www.instagram.com/apoiarse.online">www.instagram.com/apoiarse.online</a></li>
 							</ul>
 						</div>
 						<div class="col-md-6">
@@ -56,7 +55,6 @@
 							</div>
 						</div>
 					</div>
-                @endisset
 				</form>
 			</div>
 		</div>

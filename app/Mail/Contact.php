@@ -31,7 +31,7 @@ class Contact extends Mailable
     public function build()
     {
         return $this->replyTo($this->data['reply_email'], $this->data['reply_email'])
-                    ->to(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
+                    ->to('contato@apoiar-se.online', 'Contato')
                     ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
                     ->subject("Contato - Site")
                     ->markdown('email.contact', [
