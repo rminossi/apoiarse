@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Donation;
 use App\Services\AsaasService;
 use App\Services\MercadoPagoService;
 use Illuminate\Http\Request;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class CobrancasController extends Controller
 {
-    private $number;
+    private $donation;
     private $mpService;
     private $asaasService;
 
@@ -17,6 +18,7 @@ class CobrancasController extends Controller
     {
         $this->mpService = new MercadoPagoService();
         $this->asaasService = new AsaasService();
+        $this->donation = new Donation();
     }
 
     //receive webhook
@@ -47,14 +49,14 @@ class CobrancasController extends Controller
 
     private function marcarCobrancaAsaasComoRecebida(mixed $payment): void
     {
-        $this->number
+        $this->donation
             ->where('asaas_operation_id', $payment['id'])
             ->update(['status' => 3]);
     }
 
     private function marcarCobrancaAsaasComoVencida(mixed $payment): void
     {
-        $this->number
+        $this->donation
             ->where('asaas_operation_id', $payment['id'])
             ->update(['status' => 1]);
     }
@@ -62,14 +64,14 @@ class CobrancasController extends Controller
     private function marcarCobrancaMPComoRecebida(mixed $transaction_id): void
     {
         Log::debug($transaction_id);
-        $this->number
+        $this->donation
             ->where('mp_operation_id', $transaction_id)
             ->update(['status' => 3]);
     }
 
     private function marcarCobrancaMPComoVencida(mixed $transaction_id): void
     {
-        $this->number
+        $this->donation
             ->where('mp_operation_id', $transaction_id)
             ->update(['status' => 1]);
     }
