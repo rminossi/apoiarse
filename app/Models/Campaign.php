@@ -20,6 +20,13 @@ class Campaign extends Model
         'slug',
     ];
 
+    protected $appends = [
+        'cover',
+        'missing_amount',
+        'total_donations',
+        'number_of_donations',
+    ];
+
     public function images()
     {
         return $this->hasMany(ImageCampaign::class, 'campaign_id')->orderBy('cover', 'ASC');
@@ -54,7 +61,33 @@ class Campaign extends Model
 
     public function getGoalAttribute($value)
     {
+        if (!empty($value)) {
+            return number_format($value, '2', ',', '.');
+        }
+    }
+
+    public function getTotalDonationsAttribute()
+    {
+        $value = $this->donations()->where('status', 3)->sum('amount');
         return number_format($value, '2', ',', '.');
+    }
+
+
+    public function getNumberOfDonationsAttribute()
+    {
+        return $this->donations()->where('status', 3)->count();
+    }
+
+    public function getMissingAmountAttribute()
+    {
+        if (!empty($this->goal)) {
+            //convert 00.000,00 to 000000.00
+            $goal = floatval(str_replace('.', ',', $this->convertStringToDouble($this->goal)));
+            $total = floatval(str_replace('.', ',', $this->convertStringToDouble($this->getTotalDonationsAttribute())));
+            return number_format(floatval($goal - $total), '2', ',', '.');
+        }
+
+        return null;
     }
 
     private function convertStringToDate(?string $param)

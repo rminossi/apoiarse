@@ -47,8 +47,17 @@
                                             <span class="icon-table"></span>
                                         </div>
                                         <div class="realty_list_item_card_content">
+                                            <span class="realty_list_item_description_title">Apoios:</span>
+                                            <span class="realty_list_item_description_content">{{$campaign->q_donations}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="realty_list_item_card">
+                                        <div class="realty_list_item_card_image">
+                                            <span class="icon-money"></span>
+                                        </div>
+                                        <div class="realty_list_item_card_content">
                                             <span class="realty_list_item_description_title">Meta:</span>
-                                            <span class="realty_list_item_description_content">{{$campaign->goal}}</span>
+                                            <span class="realty_list_item_description_content">{{$campaign->goal ?? 'Sem Meta'}}</span></span>
                                         </div>
                                     </div>
                                     <div class="realty_list_item_card">
@@ -56,7 +65,7 @@
                                             <span class="icon-bar-chart"></span>
                                         </div>
                                         <div class="realty_list_item_card_content">
-                                            <span class="realty_list_item_description_title">Apoios:</span>
+                                            <span class="realty_list_item_description_title">Apoios Pagos:</span>
                                             <span class="realty_list_item_description_content">{{$campaign->donations()->where('status', '3')->count()}}</span></span>
                                         </div>
                                     </div>
@@ -65,17 +74,13 @@
                                             <span class="icon-bar-chart"></span>
                                         </div>
                                         <div class="realty_list_item_card_content">
-                                            <span class="realty_list_item_description_title">Total Arrecadado:</span>
-                                            <span class="realty_list_item_description_content">{{$campaign->donations()->where('status', '2')->count()}}</span></span>
+                                            <span class="realty_list_item_description_title">Apoios Pendentes:</span>
+                                            <span class="realty_list_item_description_content">{{$campaign->donations()->where('status', '1')->count()}}</span></span>
                                         </div>
                                     </div>
                                     <div class="realty_list_item_card">
                                         <div class="realty_list_item_card_image">
                                             <span class="icon-bar-chart"></span>
-                                        </div>
-                                        <div class="realty_list_item_card_content">
-                                            <span class="realty_list_item_description_title">Aguardando Pagamento:</span>
-                                            <span class="realty_list_item_description_content">{{$campaign->donations()->where('status', '2')->count()}}</span></span>
                                         </div>
                                     </div>
                                 </div>

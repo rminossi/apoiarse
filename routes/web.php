@@ -60,5 +60,9 @@ Route::group(['prefix' => 'sessao', 'as' => 'sessao.'], function () {
     Route::get('/registrar', [AuthController::class, 'showRegisterForm'])->middleware('guest')->name('register');
     Route::post('/entrar', [AuthController::class, 'login'])->name('enviar-login');
     Route::post('/registrar', [AuthController::class, 'register'])->name('enviar-registro');
+    Route::post('/recuperar-senha', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
+    Route::get('/recuperar-senha', [AuthController::class, 'forgotPasswordForm'])->name('forgotPasswordForm');
+    Route::post('/recuperar-senha/{token}', [AuthController::class, 'resetPassword'])->name('resetPassword');
+    Route::get('/recuperar-senha/{token}', [AuthController::class, 'resetPasswordForm'])->name('resetPasswordForm');
     Route::get('/sair', [AuthController::class, 'logout'])->name('logout');
 });

@@ -4,7 +4,7 @@
 	<div class="fh5co-overlay"></div>
 	<div class="fh5co-cover text-center" data-stellar-background-ratio="0.5" style="background-image: url({{ asset('assets/frontend/images/apoiarse.png') }});">
 		<div class="desc animate-box">
-			<h2>Venha <strong>apoiar</strong> conosco</h2>
+			<h2><strong>Venha apoiar conosco</strong></h2>
 			<span><a class="btn btn-primary btn-lg" href="{{route('web.campaigns')}}">Ver nossas campanhas</a></span>
 		</div>
 	</div>

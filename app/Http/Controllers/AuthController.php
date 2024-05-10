@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ResetPassword;
 use App\Models\Donation;
 use App\Models\Campaign;
 use App\Models\User;
@@ -9,7 +10,9 @@ use App\Services\AsaasService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use function Symfony\Component\String\u;
 
 class AuthController extends Controller
 {
@@ -81,6 +84,73 @@ class AuthController extends Controller
         }
 
         return view('auth.index');
+    }
+
+    public function forgotPasswordForm(Request $request)
+    {
+        return view('auth.forgot-password');
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => ['required', 'string', 'email', 'max:255']
+        ]);
+        if ($validator->fails()) {
+            $json['message'] = $this->message->error($validator->errors()->first())->render();
+            return response()->json($json);
+        }
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            $json['message'] = $this->message->error('E-mail não encontrado.')->render();
+            return response()->json($json);
+        }
+        $user->update(['password_reset_token' => md5(uniqid(rand(), true))]);
+        Mail::send(new ResetPassword(user: $user));
+        $json['message'] = $this->message->success('Um link para redefinir sua senha foi enviado para seu e-mail.')->render();
+        return response()->json($json);
+    }
+
+    public function resetPasswordForm($token)
+    {
+        return view('auth.reset-password', ['token' => $token]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:8', 'confirmed']
+        ]);
+        if ($validator->fails()) {
+            $json['message'] = $this->message->error($validator->errors()->first())->render();
+            return response()->json($json);
+        }
+        $user = User::where('password_reset_token', $request->token)->first();
+        if (!$user) {
+            $json['message'] = $this->message->error('Token inválido.')->render();
+            return response()->json($json);
+        }
+        $user->update([
+            'password' => Hash::make($request->password),
+            'password_reset_token' => null
+        ]);
+
+        Auth::login($user, true);
+
+        if (Auth::user()->is_admin) {
+            $json['redirect'] = route('admin.home');
+        } else {
+            $campaign = session()->get('campaign');
+            if ($campaign) {
+                session()->forget('campaign');
+                $json['redirect'] = route('web.campaign', ['slug' => $campaign]);
+            } else {
+                $json['redirect'] = route('usuario.home');
+            }
+        }
+
+        return response()->json($json);
     }
 
     public function home()

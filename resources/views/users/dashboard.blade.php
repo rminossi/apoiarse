@@ -71,12 +71,11 @@
                                     <h4 style="width: max-content"><a href="/campanhas/{{$campaign->slug}}" class="text-orange" target="_blank">{{$campaign->title}}</a></h4>
                                     <div class="realty_list_item_card">
                                         <div class="realty_list_item_card_image">
-                                            <span class="icon-table"></span>
+                                            <span class="icon-money"></span>
                                         </div>
                                         <div class="realty_list_item_card_content">
                                             <span class="realty_list_item_description_title">Meta:</span>
-                                            <span
-                                                class="realty_list_item_description_content">{{floatval($campaign->goal) == 0 ? 'Indefinido' : 'R$ '.number_format(floatval($campaign->goal), 2, ',', '.')}}</span>
+                                            <span class="realty_list_item_description_content">R$ {{number_format(floatval(str_replace('.', '', $campaign->goal)), 2, ',', '.')}}</span></span>
                                         </div>
                                     </div>
                                     <div class="realty_list_item_card">
@@ -84,20 +83,27 @@
                                             <span class="icon-bar-chart"></span>
                                         </div>
                                         <div class="realty_list_item_card_content">
-                                            <span class="realty_list_item_description_title">Total arrecadado:</span>
-                                            <span
-                                                class="realty_list_item_description_content">R$ {{number_format($campaign->donations()->sum('amount'), 2, ',', '.')}}</span></span>
+                                            <span class="realty_list_item_description_title">Total de apoios:</span>
+                                            <span class="realty_list_item_description_content">{{$campaign->donations()->count()}}</span></span>
                                         </div>
                                     </div>
-                                    @if(floatval($campaign->goal) != 0)
+                                    <div class="realty_list_item_card">
+                                        <div class="realty_list_item_card_image">
+                                            <span class="icon-bar-chart"></span>
+                                        </div>
+                                        <div class="realty_list_item_card_content">
+                                            <span class="realty_list_item_description_title">Total Arrecadado:</span>
+                                            <span class="realty_list_item_description_content">R$ {{number_format($campaign->donations()->where('status', '1')->sum('amount'), 2, ',', '.')}}</span></span>
+                                        </div>
+                                    </div>
+                                    @if($campaign->goal)
                                         <div class="realty_list_item_card">
                                             <div class="realty_list_item_card_image">
                                                 <span class="icon-bar-chart"></span>
                                             </div>
                                             <div class="realty_list_item_card_content">
-                                                <span class="realty_list_item_description_title">Valor restante:</span>
-                                                <span
-                                                    class="realty_list_item_description_content">{{number_format(floatval($campaign->goal) - $campaign->donations()->sum('amount'), 2, ',', '.')}}</span></span>
+                                                <span class="realty_list_item_description_title">Total Faltante</span>
+                                                <span class="realty_list_item_description_content">R$ {{number_format(floatval(str_replace('.', '', $campaign->goal)) - $campaign->donations()->where('status', '1')->sum('amount'), 2, ',', '.')}}</span></span>
                                             </div>
                                         </div>
                                     @endif

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Campaign as RifaRequest;
+use App\Http\Requests\Campaign as CampaignRequest;
 use App\Models\Donation;
 use App\Models\Image;
 use App\Models\ImageCampaign;
@@ -44,13 +44,20 @@ class CampaignController extends Controller
     }
 
     public function create(){
-        return view('admin.campaigns.create');
+        $user = auth()->user();
+        if($user->is_admin) {
+            return view('admin.campaigns.create');
+        }
+        return view('users.campaigns.create');
     }
 
-    public function store(RifaRequest $request){
+    public function store(CampaignRequest $request){
 
         $user = auth()->user();
         $request->request->add(['user_id' => $user->id]);
+        if ($request->request->get('goal') != null) {
+            $request->request->set('goal', str_replace(',', '.', str_replace('.', '', $request->request->get('goal'))));
+        }
         $campaign = Campaign::create($request->all());
         $request->request->add(['campaign_id' => $campaign->id]);
         $campaign->setSlug();
@@ -72,7 +79,13 @@ class CampaignController extends Controller
             }
         }
 
-        return redirect()->route('admin.campaigns.index', [
+        if ($user->is_admin) {
+            return redirect()->route('admin.campaigns.index', [
+                'campaigns' => $campaign->id
+            ])->with(['message' => 'Campaign cadastrada com sucesso!']);
+        }
+
+        return redirect()->route('usuario.campanhas.index', [
             'campaigns' => $campaign->id
         ])->with(['message' => 'Campaign cadastrada com sucesso!']);
     }
@@ -93,6 +106,7 @@ class CampaignController extends Controller
         }
 
         if (!empty($campaign)) {
+
             return view('users.campaigns.edit', [
                 'campaign' => $campaign,
                 'donations' => $donations
@@ -102,20 +116,10 @@ class CampaignController extends Controller
         }
     }
 
-    public function cancelReserve() {
-        $donations = Donation::where('status', 2);
-        foreach ($donations as $number){
-            $dataReserva = date_create($number->updated_at);
-            $dataHoje = date_create();
-            $resultado = date_diff($dataReserva, $dataHoje);
-            if ($number->status === 2 && $resultado === 5) {
-                $number->status = 1;
-            }
-        }
-    }
-
     public function update(Request $request, $campaign){
         $campaign = Campaign::where('id', $campaign)->first();
+        $user = auth()->user();
+
         if($request->allFiles()) {
             foreach ($request->allFiles()['files'] as $image) {
                 $ext = $image->getClientOriginalExtension();
@@ -134,9 +138,18 @@ class CampaignController extends Controller
         }
 
         try {
-            $request->request->set('goal', str_replace(',', '.', str_replace('.', '', $request->request->get('goal'))));
+            if ($request->request->get('goal') != null) {
+                $request->request->set('goal', str_replace(',', '.', str_replace('.', '', $request->request->get('goal'))));
+            }
+
             $campaign->update($request->all());
         } catch (\Exception $e) {
+            if ($user->is_admin) {
+                return redirect()->route('admin.campaigns.edit', [
+                    'campanha' => $campaign->id
+                ])->with(['error' => 'Erro ao atualizar campanha.']);
+            }
+
             return redirect()->route('usuario.campanhas.edit', [
                 'campanha' => $campaign->id
             ])->with(['error' => 'Erro ao atualizar campanha.']);
@@ -144,8 +157,14 @@ class CampaignController extends Controller
 
         $campaign->setSlug();
 
-        return redirect()->route('usuario.campanhas.edit', [
-            'campanha' => $campaign->id
+        if($user->is_admin) {
+            return redirect()->route('admin.campaigns.index', [
+                'campaigns' => $campaign->id
+            ])->with(['message' => 'Campanha atualizada com sucesso!']);
+        }
+
+        return redirect()->route('usuario.campanhas.index', [
+            'campaigns' => $campaign->id
         ])->with(['message' => 'Campanha atualizada com sucesso!']);
     }
 
@@ -181,7 +200,12 @@ class CampaignController extends Controller
 
     public function destroy(Campaign $campaign){
         $campaign->delete();
-        return redirect()-> route('admin.campaigns.index')->with(['message' => 'Campaign deletada com sucesso!']);
+        $user = auth()->user();
+
+        if($user->is_admin) {
+            return redirect()-> route('admin.campaigns.index')->with(['message' => 'Campaign deletada com sucesso!']);
+        }
+        return redirect()-> route('users.campaigns.index')->with(['message' => 'Campaign deletada com sucesso!']);
 
     }
 }

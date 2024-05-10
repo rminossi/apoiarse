@@ -34,7 +34,7 @@
                         <p class="icon-asterisk">{{ session()->get('message') }}</p>
                     </div>
                 @endif
-                <ul class="nav_tabs">
+                <ul class="nav_tabs" style="flex-flow: row">
                     <li class="nav_tabs_item">
                         <a href="#data" class="nav_tabs_item_link active">Dados do Site</a>
                     </li>

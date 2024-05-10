@@ -18,7 +18,7 @@ class CreateCampaignsTable extends Migration
             $table->string('title');
             $table->text('description');
             $table->string('type');
-            $table->double('goal');
+            $table->double('goal')->nullable();
             $table->integer('status');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('slug')->nullable();

@@ -23,6 +23,8 @@ class User extends Authenticatable
         'phone',
         'asaas_id',
         'is_admin',
+        'api_token',
+        'password_reset_token'
     ];
 
     /**

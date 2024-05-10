@@ -45,12 +45,18 @@
                     </label>
                     <label>
                         <span class="field icon-unlock-alt">Senha:</span>
-                        <input type="password" name="password" required placeholder="Crie sua senha" />
+                        <input class="mb-1" type="password" name="password" required placeholder="Crie sua senha" />
+                        <span>
+                            * A senha deve ter pelo menos 8 caracteres
+                        </span>
                     </label>
                     <label>
                         <span class="field icon-unlock-alt">Confirme sua senha:</span>
-                        <input type="password" name="password_confirmation" required
+                        <input class="mb-1" type="password" name="password_confirmation" required
                                placeholder="Confirme sua senha" />
+                        <span>
+                            * A senha deve ter pelo menos 8 caracteres
+                        </span>
                     </label>
                     <button class="gradient gradient-green radius icon-sign-in">Registrar</button>
                     <div class="text-center mt-2">

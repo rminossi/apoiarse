@@ -171,7 +171,7 @@ figure {
   letter-spacing: 1px;
 }
 .fh5co-cover .desc span a {
-  color: #4c4a4a;
+  color: #fff;
 }
 .fh5co-cover .desc span a:hover, .fh5co-cover .desc span a:focus {
   color: #fff !important;
@@ -202,7 +202,7 @@ figure {
 }
 
 .sf-menu a {
-  color: rgba(255, 255, 255, 0.5);
+  color: #3b320880;
   padding: 0.75em 1em !important;
   font-weight: normal;
   border-left: none;
@@ -214,7 +214,7 @@ figure {
   border-bottom: none !important;
 }
 .sf-menu a:hover, .sf-menu a:focus {
-  color: #fff !important;
+  color: #3b320880 !important;
 }
 
 .sf-menu li.active a:hover, .sf-menu li.active a:focus {

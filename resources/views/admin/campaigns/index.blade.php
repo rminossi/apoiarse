@@ -33,23 +33,14 @@
                             <img src="{{url($campaign->cover())}}" alt="">
                         </div>
                         <div class="realty_list_item_content">
-                            <h4>{{$campaign->title}}</h4>
-                            <div class="realty_list_item_card">
-                                <div class="realty_list_item_card_image">
-                                    <span class="icon-table"></span>
-                                </div>
-                                <div class="realty_list_item_card_content">
-                                    <span class="realty_list_item_description_title">Cotas:</span>
-                                    <span class="realty_list_item_description_content">{{$campaign->q_donations}}</span>
-                                </div>
-                            </div>
+                            <h4><a href="/campanhas/{{$campaign->slug}}" class="text-orange" target="_blank">{{$campaign->title}}</a></h4>
                             <div class="realty_list_item_card">
                                 <div class="realty_list_item_card_image">
                                     <span class="icon-money"></span>
                                 </div>
                                 <div class="realty_list_item_card_content">
                                     <span class="realty_list_item_description_title">Meta:</span>
-                                    <span class="realty_list_item_description_content">{{$campaign->goal}}</span></span>
+                                    <span class="realty_list_item_description_content">{{$campaign->goal ? 'R$' . $campaign->goal : 'Sem Meta'}}</span></span>
                                 </div>
                             </div>
                             <div class="realty_list_item_card">
@@ -57,8 +48,8 @@
                                     <span class="icon-bar-chart"></span>
                                 </div>
                                 <div class="realty_list_item_card_content">
-                                    <span class="realty_list_item_description_title">Cotas Pagas:</span>
-                                    <span class="realty_list_item_description_content">{{$campaign->donations()->where('status', '3')->count()}}</span></span>
+                                    <span class="realty_list_item_description_title">Total de apoios:</span>
+                                    <span class="realty_list_item_description_content">{{$campaign->numberOfDonations}}</span></span>
                                 </div>
                             </div>
                             <div class="realty_list_item_card">
@@ -66,19 +57,21 @@
                                     <span class="icon-bar-chart"></span>
                                 </div>
                                 <div class="realty_list_item_card_content">
-                                    <span class="realty_list_item_description_title">Cotas Disponíveis:</span>
-                                <span class="realty_list_item_description_content">{{$campaign->donations()->where('status', '1')->count()}}</span></span>
+                                    <span class="realty_list_item_description_title">Total Arrecadado:</span>
+                                    <span class="realty_list_item_description_content">R$ {{$campaign->totalDonations}}</span></span>
                                 </div>
                             </div>
-                            <div class="realty_list_item_card">
-                                <div class="realty_list_item_card_image">
-                                    <span class="icon-bar-chart"></span>
+                            @if($campaign->goal)
+                                <div class="realty_list_item_card">
+                                    <div class="realty_list_item_card_image">
+                                        <span class="icon-bar-chart"></span>
+                                    </div>
+                                    <div class="realty_list_item_card_content">
+                                        <span class="realty_list_item_description_title">Total Faltante</span>
+                                        <span class="realty_list_item_description_content">R$ {{$campaign->missingAmount}}</span></span>
+                                    </div>
                                 </div>
-                                <div class="realty_list_item_card_content">
-                                    <span class="realty_list_item_description_title">Cotas Reservadas:</span>
-                                    <span class="realty_list_item_description_content">{{$campaign->donations()->where('status', '2')->count()}}</span></span>
-                                </div>
-                            </div>
+                            @endif
                         </div>
                         <div class="realty_list_item_actions mt-1">
                             <div class="ml-auto d-flex">

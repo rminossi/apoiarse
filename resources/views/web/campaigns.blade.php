@@ -5,7 +5,7 @@
     <div class="fh5co-cover fh5co-cover_2 text-center" data-stellar-background-ratio="0.5" style="background-image: url('{{asset('assets/frontend/images/apoiarse.png')}}');">
         <div class="desc animate-box">
             <h2><strong>Nossas Campanhas</strong></h2>
-            <span>Confira abaixo as campanhas atuais e também as finalizadas.</span>
+            <span><strong>Confira abaixo as campanhas atuais e também as finalizadas.</strong></span>
         </div>
     </div>
 </div>

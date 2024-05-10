@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->dateTime('last_login_at')->nullable();
             $table->string('last_login_ip')->nullable();
             $table->boolean('is_admin')->default(false);
+            $table->string('password_reset_token')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

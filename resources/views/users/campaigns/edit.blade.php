@@ -31,7 +31,7 @@
                         <p class="icon-asterisk">{{ session()->get('message') }}</p>
                     </div>
                 @endif
-                <ul class="nav_tabs">
+                <ul class="nav_tabs" style="flex-flow: row">
                     <li class="nav_tabs_item">
                         <a href="#data" class="nav_tabs_item_link active">Dados da Campanha</a>
                     </li>
@@ -70,8 +70,8 @@
                             </div>
                             <div class="label_g2">
                                 <label class="label mr-2">
-                                    <span class="legend">Meta (R$):</span>
-                                    <input type="text" name="goal" placeholder="Ex: R$ 1.000,00"
+                                    <span class="legend">Meta (R$) - deixar em branco para sem limite:</span>
+                                    <input type="text" class="mask-money" name="goal" placeholder="Ex: R$ 1.000,00"
                                            value="{{old('goal') ?? $campaign->goal}}"/>
                                 </label>
                                 <label class="label">
@@ -149,7 +149,24 @@
         </div>
     </section>
     <script>
-        CKEDITOR.replace( 'description' );
+        CKEDITOR.replace( 'description', {
+            toolbar: [
+                { name: 'document', groups: [ 'mode', 'document', 'doctools' ], items: [ 'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates' ] },
+                { name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+                { name: 'editing', groups: [ 'find', 'selection', 'spellchecker' ], items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Scayt' ] },
+                { name: 'forms', items: [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
+                '/',
+                { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+                { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
+                { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+                '/',
+                { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
+                { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+                { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
+                { name: 'others', items: [ '-' ] },
+                { name: 'about', items: [ 'About' ] }
+            ]
+        });
     </script>
     <script>
         $(function () {

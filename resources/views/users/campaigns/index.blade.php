@@ -33,14 +33,14 @@
                             <img src="{{url($campaign->cover())}}" alt="">
                         </div>
                         <div class="realty_list_item_content">
-                            <h4>{{$campaign->title}}</h4>
+                            <h4><a href="/campanhas/{{$campaign->slug}}" class="text-orange" target="_blank">{{$campaign->title}}</a></h4>
                             <div class="realty_list_item_card">
                                 <div class="realty_list_item_card_image">
                                     <span class="icon-money"></span>
                                 </div>
                                 <div class="realty_list_item_card_content">
                                     <span class="realty_list_item_description_title">Meta:</span>
-                                    <span class="realty_list_item_description_content">R$ {{number_format(floatval(str_replace('.', '', $campaign->goal)), 2, ',', '.')}}</span></span>
+                                    <span class="realty_list_item_description_content">{{$campaign->goal ? 'R$' . $campaign->goal : 'Sem Meta'}}</span></span>
                                 </div>
                             </div>
                             <div class="realty_list_item_card">
@@ -49,7 +49,7 @@
                                 </div>
                                 <div class="realty_list_item_card_content">
                                     <span class="realty_list_item_description_title">Total de apoios:</span>
-                                    <span class="realty_list_item_description_content">{{$campaign->donations()->count()}}</span></span>
+                                    <span class="realty_list_item_description_content">{{$campaign->numberOfDonations}}</span></span>
                                 </div>
                             </div>
                             <div class="realty_list_item_card">
@@ -58,17 +58,17 @@
                                 </div>
                                 <div class="realty_list_item_card_content">
                                     <span class="realty_list_item_description_title">Total Arrecadado:</span>
-                                <span class="realty_list_item_description_content">R$ {{number_format($campaign->donations()->where('status', '1')->sum('amount'), 2, ',', '.')}}</span></span>
+                                <span class="realty_list_item_description_content">R$ {{$campaign->totalDonations}}</span></span>
                                 </div>
                             </div>
-                            @if(floatval($campaign->goal) != 0)
+                            @if($campaign->goal)
                                 <div class="realty_list_item_card">
                                     <div class="realty_list_item_card_image">
                                         <span class="icon-bar-chart"></span>
                                     </div>
                                     <div class="realty_list_item_card_content">
                                         <span class="realty_list_item_description_title">Total Faltante</span>
-                                        <span class="realty_list_item_description_content">R$ {{number_format(floatval(str_replace('.', '', $campaign->goal)) - $campaign->donations()->where('status', '1')->sum('amount'), 2, ',', '.')}}</span></span>
+                                        <span class="realty_list_item_description_content">R$ {{$campaign->missingAmount}}</span></span>
                                     </div>
                                 </div>
                             @endif
