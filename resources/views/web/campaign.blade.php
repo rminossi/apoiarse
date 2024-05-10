@@ -102,6 +102,14 @@
                 <div class="container" id="apoiar">
                     <div class="row">
                         <div class="col-12 col text-center" id="cotas-aleatorias">
+                            <h4 class="fh5co-number">Total Arrecadado</h4>
+                            <div class="mt-3 mb-5">
+                                <div class="col text-center">
+                                    <p class="text-center h2" style="margin-top: 10px;margin-bottom: 10px">
+                                        R$ {{number_format($campaign->donations->where('status', 3)->sum('amount'), 2, ',', '.')}}
+                                    </p>
+                                </div>
+                            </div>
                             <h4 class="fh5co-number">Apoiar!</h4>
                             <div class="mt-3">
                                 <div class="col text-center">

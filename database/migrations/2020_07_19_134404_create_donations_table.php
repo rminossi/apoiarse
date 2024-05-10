@@ -23,6 +23,8 @@ class CreateDonationsTable extends Migration
             $table->string('asaas_operation_id')->nullable();
             $table->string('mp_operation_id')->nullable();
             $table->string('payment_method')->nullable();
+            $table->text('pix_qrcode')->nullable();
+            $table->text('pix_key')->nullable();
             $table->integer('status');
             $table->timestamps();
         });

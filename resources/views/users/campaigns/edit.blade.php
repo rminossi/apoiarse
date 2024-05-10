@@ -125,11 +125,11 @@
                                         <tr>
                                             <td>
                                                 @if($donation->status == 1)
-                                                    Aprovado
-                                                @elseif($donation->status == 2)
-                                                    Reprovado
-                                                @else
                                                     Pendente
+                                                @elseif($donation->status == 2)
+                                                    Expirado
+                                                @else
+                                                    Aprovado
                                                 @endif
                                             </td>
                                             <td>{{$donation->user->name}}</td>

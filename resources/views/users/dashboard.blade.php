@@ -43,11 +43,11 @@
                                 <td>{{date('d/m/Y H:i', strtotime($donation->created_at))}}</td>
                                 <td>
                                     @if($donation->status == 1)
-                                        Aprovado
-                                    @elseif($donation->status == 2)
-                                        Reprovado
-                                    @else
                                         Pendente
+                                    @elseif($donation->status == 2)
+                                        Expirado
+                                    @else
+                                        Aprovado
                                     @endif
                                 </td>
                             </tr>

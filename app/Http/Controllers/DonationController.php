@@ -76,7 +76,9 @@ class DonationController extends Controller
                 'amount' => $amount,
                 'asaas_operation_id' => $cobranca['operation_id'],
                 'payment_method' => 'PIX',
-                'status' => 1
+                'status' => 1,
+                'pix_qrcode' => $cobranca['qrCode']['encodedImage'],
+                'pix_key' => $cobranca['qrCode']['qrCode']
             ]);
 
         } else {
@@ -87,7 +89,9 @@ class DonationController extends Controller
                 'amount' => $amount,
                 'mp_operation_id' => $cobranca['operation_id'],
                 'payment_method' => 'PIX',
-                'status' => 1
+                'status' => 1,
+                'pix_qrcode' => $cobranca['qrCode']['encodedImage'],
+                'pix_key' => isset($cobranca['qrCode']['qrCode'])
             ]);
         }
         DB::commit();

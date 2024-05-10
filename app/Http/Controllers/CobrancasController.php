@@ -58,7 +58,7 @@ class CobrancasController extends Controller
     {
         $this->donation
             ->where('asaas_operation_id', $payment['id'])
-            ->update(['status' => 1]);
+            ->update(['status' => 2]);
     }
 
     private function marcarCobrancaMPComoRecebida(mixed $transaction_id): void
@@ -73,6 +73,6 @@ class CobrancasController extends Controller
     {
         $this->donation
             ->where('mp_operation_id', $transaction_id)
-            ->update(['status' => 1]);
+            ->update(['status' => 2]);
     }
 }

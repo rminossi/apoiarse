@@ -16,7 +16,9 @@ class Donation extends Model
         'asaas_operation_id',
         'mp_operation_id',
         'payment_method',
-        'status'
+        'status',
+        'pix_qrcode',
+        'pix_key'
     ];
 
     public function user()
