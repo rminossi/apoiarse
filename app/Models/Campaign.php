@@ -42,6 +42,11 @@ class Campaign extends Model
         $cover = $this->images()->where('cover', 1)->first();
 
         if (empty($cover)) {
+
+            if (empty($this->images()->first())) {
+                return Storage::url('public/campaigns/imagem-indisponivel.jpg');
+            }
+
             $path = Image::find($this->images()->first()->image_id)->path;
 
             return Storage::url('public/' . $path);
