@@ -20,7 +20,7 @@
 
     <div class="dash_content_app_box">
         <div class="dash_content_app_box_stage">
-            <table id="dataTable" class="nowrap stripe" width="100" style="width: 100% !important;">
+            <table id="dataTable" class="nowrap stripe" style="width: 100%">
                 <thead>
                 <tr>
                     <th>Campanha</th>
@@ -32,7 +32,7 @@
                 <tbody>
                     @foreach($donations as $donation)
                         <tr>
-                            <td><a href="/campanhas/{{$donation->campaign->slug}}" class="text-orange">{{$donation->campaign->title}}</a></td>
+                            <td style="max-width: 200px;word-wrap: break-word; white-space: normal;"><a href="/campanhas/{{$donation->campaign->slug}}" class="text-orange">{{$donation->campaign->title}}</a></td>
                             <td>R$ {{number_format($donation->amount, 2, ',', '.')}}</td>
                             <td>{{date('d/m/Y H:i', strtotime($donation->created_at))}}</td>
                             <td>

@@ -111,6 +111,9 @@
                             </div>
                         </div>
                         <div id="donations" class="d-none">
+                            <div style="display: block;
+    overflow-x: auto;
+    white-space: nowrap;">
                             <table id="dataTable" class="nowrap stripe" width="100" style="width: 100% !important;">
                                 <thead>
                                 <tr>
@@ -135,6 +138,7 @@
                                 @endforeach
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                     </div>
                     <div class="text-right mt-2">
