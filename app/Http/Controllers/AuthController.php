@@ -55,18 +55,19 @@ class AuthController extends Controller
             'asaas_id' => $asaas_user['id']
         ]);
 
-
         Auth::login($user, true);
         if (Auth::user()->is_admin) {
-            return redirect()->route('admin.home');
+            $json['redirect'] = route('admin.home');
         } else {
             $campaign = session()->get('campaign');
             if ($campaign) {
                 session()->forget('campaign');
-                return redirect()->route('web.campaign', $campaign);
+                $json['redirect'] = route('web.campaign', ['slug' => $campaign]);
+            } else {
+                $json['redirect'] = route('usuario.home');
             }
-            return redirect()->route('usuario.home');
         }
+        return response()->json($json);
     }
 
     public function showLoginForm(Request $request)
