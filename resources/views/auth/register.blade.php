@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../assets/backend/css/boot.css" />
     <link rel="stylesheet" href="../assets/backend/css/login.css" />
 
-    <link rel="icon" type="image/png" href="assets/frontend/images/favicon.png" />
+    <link rel="icon" type="image/png" href="../assets/frontend/images/favicon.png" />
     <meta name="csrf-token" content="{{@csrf_token()}}">
 
     <title>Apoiar-se Online - Registro</title>
@@ -26,8 +26,7 @@
                     <img src="{{url(asset('assets/frontend/images/apoiarse_logo.png'))}}" width="150">
                     <h2>Registro de Usuário</h2>
                 </header>
-                <form name="register" action="{{route('sessao.enviar-registro')}}" method="post" autocomplete="off">
-                    @csrf
+                <form name="register" action="{{route('sessao.enviar-registro')}}" method="post" autocomplete="on">
                     <label>
                         <span class="field icon-person">Nome Completo:</span>
                         <input type="text" name="name" placeholder="Informe seu nome" required />
@@ -38,11 +37,11 @@
                     </label>
                     <label>
                         <span class="field icon-phone">Telefone:</span>
-                        <input type="text" name="phone" placeholder="Informe seu telefone" required />
+                        <input type="text" class="mask-cel" name="phone" placeholder="Informe seu telefone" required />
                     </label>
                     <label>
                         <span class="field icon-user-plus">CPF:</span>
-                        <input type="text" name="cpf" placeholder="Informe seu CPF" required />
+                        <input type="text" class="mask-doc" name="cpf" placeholder="Informe seu CPF" required />
                     </label>
                     <label>
                         <span class="field icon-unlock-alt">Senha:</span>
@@ -67,7 +66,15 @@
     </div>
 
     <script src="../assets/backend/js/jquery.js"></script>
-    <script src="../assets/backend/js/login.js"></script>
+    <script src="../assets/backend/js/register.js"></script>
+    <script src="../assets/frontend/js/jquery.mask.js"></script>
+
+<script>
+    $(function ($) {
+        $('.mask-cel').mask('(00) 00000-0000');
+        $('.mask-doc').mask('000.000.000-00');
+    })
+</script>
 
 </body>
 

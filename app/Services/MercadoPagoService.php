@@ -17,6 +17,18 @@ class MercadoPagoService
         ]);
     }
 
+    public function getQrCodeMercadoPago($user, float|int $valor): array
+    {
+        $cobranca = json_decode($this->generatePixPayment($user->name, $user->email, $user->phone, $user->cpf, $user->id, $valor));
+        $qrCode['qrCode'] = $cobranca->data->code;
+        $qrCode['encodedImage'] = $cobranca->data->base64;
+        $operation_id = $cobranca->data->operation_id;
+        return [
+            "qrCode" => $qrCode,
+            "operation_id" => $operation_id
+        ];
+    }
+
     public function generatePixPayment($name, $email, $phone, $cpf, $customer_id, $valueToPay)
     {
         $areaCode = substr($phone, 0, 2);
@@ -38,7 +50,7 @@ class MercadoPagoService
         ];
 
         $informations = [
-            "description" => "Compra de Campaign",
+            "description" => "Apoiar-se - Pagamento de contribuições",
             "transaction_amount" => $valueToPay,
             "payment_method_id" => "pix",
             "notification_url" => $this->notificationUrl

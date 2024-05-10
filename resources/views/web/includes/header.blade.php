@@ -13,7 +13,7 @@
           </li>
           <li>
           <li><a href="{{route('web.contato')}}">Contato</a></li>
-          <li><a href="{{route('web.my-donations')}}">Minhas doações</a></li>
+          <li><a href="{{route('usuario.home')}}">Acessar Conta</a></li>
         </ul>
       </nav>
     </div>

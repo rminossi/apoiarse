@@ -76,7 +76,7 @@
                                         <div class="realty_list_item_card_content">
                                             <span class="realty_list_item_description_title">Meta:</span>
                                             <span
-                                                class="realty_list_item_description_content">{{floatval($campaign->goal) == 0 ? 'Indefinido' : 'R$ '.number_format($campaign->goal, 2, ',', '.')}}</span>
+                                                class="realty_list_item_description_content">{{floatval($campaign->goal) == 0 ? 'Indefinido' : 'R$ '.number_format(floatval($campaign->goal), 2, ',', '.')}}</span>
                                         </div>
                                     </div>
                                     <div class="realty_list_item_card">

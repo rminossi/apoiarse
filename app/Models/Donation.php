@@ -15,6 +15,7 @@ class Donation extends Model
         'amount',
         'asaas_operation_id',
         'mp_operation_id',
+        'payment_method',
         'status'
     ];
 

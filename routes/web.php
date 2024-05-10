@@ -26,8 +26,8 @@ Route::group(['namespace' => 'Web', 'as' => 'web.'], function () {
     Route::get('/campanhas', [WebController::class, 'campaigns'])->name('campaigns');
     Route::get('/campanhas/{slug}', [WebController::class, 'campaign'])->name('campaign');
     Route::get('/contato', [WebController::class, 'contato'])->name('contato');
-    Route::get('/getUserByCpf/{cpf}', [WebController::class, 'getUserByCpf'])->name('getUserByCpf');
-    Route::post('/doar', [WebController::class, 'doar'])->name('doar');
+    Route::post('/getPixQrCode', [DonationController::class, 'getPixQrCode'])->name('getPixQrCode');
+    Route::post('/payWithCard', [DonationController::class, 'payWithCard'])->name('payWithCard');
     Route::get('/minhas-doacoes', [WebController::class, 'minhasDoacoes'])->name('my-donations');
 });
 
@@ -55,8 +55,8 @@ Route::group(['prefix' => 'usuario', 'as' => 'usuario.'], function () {
 });
 
 Route::group(['prefix' => 'sessao', 'as' => 'sessao.'], function () {
-    Route::get('/entrar', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::get('/registrar', [AuthController::class, 'showRegisterForm'])->name('register');
+    Route::get('/entrar', [AuthController::class, 'showLoginForm'])->middleware('guest')->name('login');
+    Route::get('/registrar', [AuthController::class, 'showRegisterForm'])->middleware('guest')->name('register');
     Route::post('/entrar', [AuthController::class, 'login'])->name('enviar-login');
     Route::post('/registrar', [AuthController::class, 'register'])->name('enviar-registro');
     Route::get('/sair', [AuthController::class, 'logout'])->name('logout');

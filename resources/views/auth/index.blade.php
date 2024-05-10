@@ -26,7 +26,7 @@
                     <img src="{{url(asset('assets/frontend/images/apoiarse_logo.png'))}}" width="150">
                     <h2>Entrar</h2>
                 </header>
-                <form name="login" action="{{route('sessao.enviar-login')}}" method="post" autocomplete="off">
+                <form name="login" action="{{route('sessao.enviar-login')}}" method="post" autocomplete="on">
                     <label>
                         <span class="field icon-envelope">E-mail:</span>
                         <input type="email" name="email" placeholder="Informe seu e-mail" required />

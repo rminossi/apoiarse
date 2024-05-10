@@ -71,32 +71,15 @@ class AsaasService
         return $response;
     }
 
-    public function deleteCustomer($id)
+    public function getPixQrCodeAsaas($user, float|int $valor): mixed
     {
-        $response = $this->client->request('DELETE', 'https://sandbox.asaas.com/api/v3/users/' . $id, [
-            'headers' => [
-                'accept' => 'application/json',
-                'access_token' => $this->token,
-                'content-type' => 'application/json',
-            ],
-        ]);
-
-        $response = json_decode($response->getBody(), true);
-        return $response;
-    }
-
-    public function restoreCustomer($id)
-    {
-        $response = $this->client->request('POST', 'https://sandbox.asaas.com/api/v3/users/' . $id . '/restore', [
-            'headers' => [
-                'accept' => 'application/json',
-                'access_token' => $this->token,
-                'content-type' => 'application/json',
-            ],
-        ]);
-
-        $response = json_decode($response->getBody(), true);
-        return $response;
+        $cobranca = $this->criarCobrancaPix($user->asaas_id, $valor, 'Apoiar-se Online', now()->addDays(1)->format('Y-m-d'));
+        $qrCode = $this->gerarPixQrCode($cobranca['id']);
+        $qrCode['qrCode'] = $qrCode['payload'];
+        return [
+            "qrCode" => $qrCode,
+            "operation_id" => $cobranca['id']
+        ];
     }
 
 
@@ -115,103 +98,8 @@ class AsaasService
         return $response;
     }
 
-
-    //Assinatura
-    public function criarAssinatura($asaas_id, $plano_id, $data_vencimento, $assinatura_interna)
-    {
-        try {
-            $plano = Plano::find($plano_id);
-            $data_vencimento = date('Y-m-d', strtotime($data_vencimento));
-
-            $response = $this->client->request('POST', 'https://sandbox.asaas.com/api/v3/subscriptions', [
-                'body' => '{"customer":"' . $asaas_id . '","billingType":"BOLETO","value":"' . $plano['preco'] . '","nextDueDate":"' . $data_vencimento . '","cycle":"MONTHLY","description":"Assinatura - Plano ' . $plano['titulo'] . '","externalReference":"' . $assinatura_interna . '",}',
-                'headers' => [
-                    'accept' => 'application/json',
-                    'access_token' => $this->token,
-                    'content-type' => 'application/json',
-                ],
-            ]);
-
-            $response = json_decode($response->getBody(), true);
-            return $response;
-        } catch (ClientException $e) {
-            dd($e->getRequest()->getBody());
-        }
-    }
-
-    public function cancelarAssinatura($id)
-    {
-        $response = $this->client->request('DELETE', 'https://sandbox.asaas.com/api/v3/subscriptions/' . $id, [
-            'headers' => [
-                'accept' => 'application/json',
-                'access_token' => $this->token,
-                'content-type' => 'application/json',
-            ],
-        ]);
-        $response = json_decode($response->getBody(), true);
-
-        return $response;
-    }
-
-    public function obterAssinatura($id)
-    {
-        $response = $this->client->request('GET', 'https://sandbox.asaas.com/api/v3/subscriptions/' . $id, [
-            'headers' => [
-                'accept' => 'application/json',
-                'access_token' => $this->token,
-                'content-type' => 'application/json',
-            ],
-        ]);
-        $response = json_decode($response->getBody(), true);
-
-        return $response;
-    }
-
-    public function obterAssinaturas()
-    {
-        $response = $this->client->request('GET', 'https://sandbox.asaas.com/api/v3/subscriptions', [
-            'headers' => [
-                'accept' => 'application/json',
-                'access_token' => $this->token,
-                'content-type' => 'application/json',
-            ],
-        ]);
-
-        $response = json_decode($response->getBody(), true);
-        return $response;
-    }
-
-    public function obterAssinaturasPorCliente($id)
-    {
-        $response = $this->client->request('GET', 'https://sandbox.asaas.com/api/v3/subscriptions?customer=' . $id, [
-            'headers' => [
-                'accept' => 'application/json',
-                'access_token' => $this->token,
-                'content-type' => 'application/json',
-            ],
-        ]);
-        $response = json_decode($response->getBody(), true);
-        return $response;
-    }
-
-    public function atualizarAssinatura($id, $plano_id, $data_vencimento, $assinatura_interna)
-    {
-        $plano = Plano::find($plano_id);
-
-        $response = $this->client->request('PUT', 'https://sandbox.asaas.com/api/v3/subscriptions/' . $id, [
-            'body' => '{"value":"' . $plano['preco'] . '","nextDueDate":"' . $data_vencimento . '","externalReference":"' . $assinatura_interna . '","description":"Assinatura - Plano ' . $plano['titulo'] . '"}',
-            'headers' => [
-                'accept' => 'application/json',
-                'access_token' => $this->token,
-                'content-type' => 'application/json',
-            ],
-        ]);
-        $response = json_decode($response->getBody(), true);
-        return $response;
-    }
-
     //Cobranças
-    public function criarCobranca($id, $valor, $descricao, $data_vencimento)
+    public function criarCobrancaPix($id, $valor, $descricao, $data_vencimento)
     {
         $response = $this->client->request('POST', 'https://sandbox.asaas.com/api/v3/payments', [
             'body' => '{"customer":"' . $id . '","value":"' . $valor . '","description":"' . $descricao . '", "billingType":"PIX","dueDate":"' . $data_vencimento . '"}',
@@ -226,52 +114,41 @@ class AsaasService
         return $response;
     }
 
-    public function obterCobranca($id)
+    public function criarCobrancaCartao(
+        $asaas_id,
+        $valor,
+        $descricao,
+        $cardNumber,
+        $cardHolderName,
+        $cardCvv,
+        $cardMonth,
+        $cardYear,
+        $cardPhone,
+        $cardEmail,
+        $cardCpfCnpj,
+        $cardPostalCode,
+        $cardAddressNumber,
+        $cardAddressComplement,
+        $remoteIp
+    )
     {
-        $response = $this->client->request('GET', 'https://sandbox.asaas.com/api/v3/payments/' . $id, [
-            'headers' => [
-                'accept' => 'application/json',
-                'access_token' => $this->token,
-                'content-type' => 'application/json',
-            ],
-        ]);
-        $response = json_decode($response->getBody(), true);
-        return $response;
-    }
+        $data_vencimento = now()->format('Y-m-d');
+        try {
+            $response = $this->client->request('POST', 'https://sandbox.asaas.com/api/v3/payments', [
+                'body' => '{"customer":"' . $asaas_id . '", "billingType":"CREDIT_CARD", "value":"' . $valor . '","description":"' . $descricao . '", "dueDate":"' . $data_vencimento . '", "creditCard":{ "number":"' . $cardNumber . '", "holderName":"' . $cardHolderName . '", "expiryMonth":"' . $cardMonth . '", "expiryYear":"' . $cardYear . '", "ccv":"' . $cardCvv . '"}, "creditCardHolderInfo":{ "name":"' . $cardHolderName . '", "phone":"' . $cardPhone . '", "email":"' . $cardEmail . '", "cpfCnpj":"' . $cardCpfCnpj . '", "postalCode":"' . $cardPostalCode . '", "addressNumber":"' . $cardAddressNumber . '", "addressComplement":"' . $cardAddressComplement . '"}, "remoteIp":"' . $remoteIp . '"}',
+                'headers' => [
+                    'accept' => 'application/json',
+                    'access_token' => $this->token,
+                    'content-type' => 'application/json',
+                ],
+            ]);
 
-    public function listarCobrancasPorCliente($id)
-    {
-        $response = $this->client->request('GET', 'https://sandbox.asaas.com/api/v3/payments?customer=' . $id, [
-            'headers' => [
-                'accept' => 'application/json',
-                'access_token' => $this->token,
-                'content-type' => 'application/json',
-            ],
-        ]);
-        $response = json_decode($response->getBody(), true);
-        return $response;
-    }
-
-    //    //curl --request POST \
-    //    //     --url https://sandbox.asaas.com/api/v3/payments/id/receiveInCash \
-    //    //     --header 'accept: application/json' \
-    //    //     --header 'content-type: application/json'
-    //paymentDate, value
-
-    public function receberCobranca($id)
-    {
-        $cobranca = Cobranca::find($id);
-        $assinatura = Assinatura::where( 'asaas_id', $cobranca->assinatura_id)->first();
-        $plano = Plano::find($assinatura->plano_id);
-        $response = $this->client->request('POST', 'https://sandbox.asaas.com/api/v3/payments/' . $cobranca->id_asaas . '/receiveInCash', [
-            'body' => '{"paymentDate":"' . date('Y-m-d') . '","value":"' . $plano->preco . '"}',
-            'headers' => [
-                'accept' => 'application/json',
-                'access_token' => $this->token,
-                'content-type' => 'application/json',
-            ],
-        ]);
-        $response = json_decode($response->getBody(), true);
-        return $response;
+            $response = json_decode($response->getBody(), true);
+            return $response;
+        } catch (ClientException $e) {
+            $response = $e->getResponse();
+            $error = json_decode($response->getBody(), true);
+            return $error;
+        }
     }
 }
