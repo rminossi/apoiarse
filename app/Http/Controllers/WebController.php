@@ -9,6 +9,7 @@ use App\Models\Site;
 use App\Models\User;
 use App\Services\AsaasService;
 use App\Services\MercadoPagoService;
+use App\Support\Message;
 use App\Support\Seo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,9 +20,10 @@ use Illuminate\Support\Facades\Session;
 class WebController extends Controller
 {
 
-    public function __construct(Seo $seo, AsaasService $asaasService)
+    public function __construct(Seo $seo, AsaasService $asaasService, Message $message)
     {
         $this->seo = $seo;
+        $this->message = $message;
         $this->asaasService = $asaasService;
         $site = Site::where('id', '1')->first();
         Session::put('site-data', $site);
@@ -123,9 +125,14 @@ class WebController extends Controller
             'reply_email' => $request->email,
             'message' => $request->message,
         ];
-        Mail::send(new Contact($data));
-        return redirect()->route('web.contato');
-        //return new Contact($data);
+        try {
+            Mail::send(new Contact($data));
+            $json['message'] = $this->message->success('Mensagem enviada com sucesso.')->render();
+        } catch (\Exception $e) {
+            $json['message'] = $this->message->error('Erro ao enviar mensagem, tente novamente.')->render();
+        }
+
+        return response()->json($json);
     }
 
     public function getUserByCpf($cpf)

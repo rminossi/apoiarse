@@ -1,5 +1,65 @@
 	@extends('web.master.master')
 	@section('content')
+        <style>
+            .ajax_response {
+                z-index: 6;
+                position: fixed;
+                padding: 20px 20px 0 0;
+                bottom: 0;
+                right: 0;
+                width: 300px;
+                max-width: 100%;
+            }
+            .ajax_response .message {
+                background: #333333;
+                font-size: 1.5em;
+                font-weight: 400;
+                border-radius: 4px;
+                color: #ffffff;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                width: 100%;
+                padding: 15px 15px 20px 15px;
+                margin-bottom: 15px;
+                position: relative;
+                cursor: pointer;
+            }
+            .ajax_response .message:before {
+                flex-basis: 0%;
+                margin: 50px 15px 0 0 !important;
+                font-size: 2.4em;
+                color: rgba(0, 0, 0, 0.5);
+            }
+            .ajax_response .message.success {
+                background: #36BA9B;
+            }
+            .ajax_response .message.info {
+                background: #39AED9;
+            }
+            .ajax_response .message.warning {
+                background: #F5B946;
+            }
+            .ajax_response .message.error {
+                background: #D94352;
+            }
+            .ajax_response .message_time {
+                content: "";
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                width: 4%;
+                height: 5px;
+                background: rgba(0, 0, 0, 0.5);
+            }
+
+            @media (max-width: 30em) {
+                .ajax_response {
+                    width: 100%;
+                    padding: 20px 20px 0 20px;
+                }
+            }
+        </style>
 		<div class="fh5co-hero fh5co-hero-2">
 			<div class="fh5co-overlay"></div>
 			<div class="fh5co-cover fh5co-cover_2 text-center" data-stellar-background-ratio="0.5" style="background-image: url('{{asset('assets/frontend/images/apoiarse.png')}}');">
@@ -12,8 +72,9 @@
 		<!-- end:header-top -->
 
 		<div id="fh5co-contact" class="animate-box">
+            <div class="ajax_response"></div>
 			<div class="container">
-			<form action="{{route('enviar-contato')}}" method="POST">
+			<form name="contact" action="{{route('enviar-contato')}}" method="POST">
 					@csrf
 					<div class="row">
 						<div class="col-md-6">
@@ -59,4 +120,48 @@
 			</div>
 		</div>
 		<!-- END map -->
+        <script>
+            $('form[name="contact"]').submit(function (event) {
+                event.preventDefault();
+                const form = $(this);
+                const action = form.attr('action');
+                const fullname = form.find('input[name="fullname"]').val();
+                const email = form.find('input[name="email"]').val();
+                const phone = form.find('input[name="phone"]').val();
+                const message = form.find('textarea[name="message"]').val();
+                $.ajax({
+                    url: action,
+                    type: 'POST',
+                    data: {fullname: fullname, email: email, phone: phone, message: message},
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        //reset form
+                        form[0].reset();
+                        if(response.message) {
+                            ajaxMessage(response.message, 3)
+                        }
+                        if(response.redirect) {
+                            window.location.href = response.redirect;
+                        }
+                    },
+                    dataType: 'json'
+                });
+            })
+
+
+
+            var ajaxResponseBaseTime = 3;
+            function ajaxMessage(message, time) {
+                var ajaxMessage = $(message);
+
+                ajaxMessage.append("<div class='message_time'></div>");
+                ajaxMessage.find(".message_time").animate({"width": "100%"}, time * 1000, function () {
+                    $(this).parents(".message").fadeOut(200);
+                });
+
+                $(".ajax_response").append(ajaxMessage);
+            }
+        </script>
 		@endsection
