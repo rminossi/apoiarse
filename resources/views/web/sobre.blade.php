@@ -17,7 +17,7 @@
                                         <i class="ti-home"></i>
                                     </div>
                                     <div class="fh5co-text">
-                                        <h3>Quem Somos</h3>
+                                        <h3 class="font-weight-bold">Quem Somos</h3>
                                         <p>A Apoiar-se é uma iniciativa sem fins lucrativos, com o ideal de apoiar as pessoas que mais precisam. A Apoiar-se tem como objetivo apoiar instituções e pessoas que precisam de apoio.</p>
                                     </div>
                                 </div>
@@ -28,7 +28,7 @@
                                         <i class="ti-briefcase"></i>
                                     </div>
                                     <div class="fh5co-text">
-                                        <h3>Nossos Valores</h3>
+                                        <h3 class="font-weight-bold">Nossos Valores</h3>
                                         <p>Desde a idealização, a Apoiar-se tem como valores:<br>
                                             <ul>
                                                 <li>Respeito</li>
@@ -61,7 +61,7 @@
                                         <p class="mt-2">O prazo para pagamento após saque da campanha é de até 24h.</p>
                                         <hr>
                                         <h2 class="mt-3 font-weight-bold">Como a plataforma se mantêm?</h2>
-                                        <p class="font-size-sm">A Apoiar-se não possui fins lucrativos, então para a manutenção e pagamentos de custos de servidores, os valores são pagos pelo proprietário do sistema e/ou através de apoio de parceiros.</p>
+                                        <p class="font-size-sm">A Apoiar-se não possui fins lucrativos, então para a manutenção e pagamentos de custos operacionais, os valores são pagos pelo proprietário do sistema e/ou através de apoio de parceiros.</p>
                                         <hr>
                                         <h2 class="mt-3 font-weight-bold">De onde vem o projeto?</h2>
                                         <p class="font-size-sm">O projeto foi desenvolvido em um momento de calamidade pública, onde se estavam sendo criadas muitas campanhas de arrecadação de recursos para instituiçoes e pessoas que precisavam de ajuda, porém foi observado que o custo das operações poderia ser reduzido, afim de aumentar a arrecadação de quem precisa.</p>

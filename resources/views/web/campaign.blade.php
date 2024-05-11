@@ -188,6 +188,49 @@
                             @endif
                         </div>
                     </div>
+                    <div class="card">
+                        <div class="card-header btn btn-primary" id="heading1">
+                            <h1>
+                                <button class="card-link" style="background-color: transparent;border: none;color: whitesmoke" aria-expanded="false" aria-controls="description1">
+                                    Ver Apoios
+                                </button>
+                            </h1>
+                        </div>
+                        <div id="description1" class="collapse" aria-labelledby="heading1">
+                            <div class="card-body">
+                                <div class="dash_content_app_box_stage">
+                                    <table id="dataTable" class="nowrap" style="width: 100%; border-collapse: collapse;">
+                                        <thead>
+                                        <tr class="text-center">
+                                            <th style="border: 1px solid #dee2e6;">Apoiador</th>
+                                            <th style="border: 1px solid #dee2e6;">CPF</th>
+                                            <th style="border: 1px solid #dee2e6;">Valor</th>
+                                            <th style="border: 1px solid #dee2e6;">Data</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($campaign->donations as $index => $donation)
+                                            <tr style="background-color: {{ $index % 2 == 0 ? '#f8f9fa' : 'white' }};">
+                                                <td style="border: 1px solid #dee2e6; max-width: 200px; word-wrap: break-word; white-space: normal;">
+                                                    {{ explode(' ', trim($donation->user->name))[0] }} ********
+                                                </td>
+                                                <td style="border: 1px solid #dee2e6;">
+                                                    {{ explode('.', trim($donation->user->cpf))[0] }}.***.***-**
+                                                </td>
+                                                <td style="border: 1px solid #dee2e6;">
+                                                    R$ {{ number_format($donation->value, 2, ',', '.') }}
+                                                </td>
+                                                <td style="border: 1px solid #dee2e6;">
+                                                    {{ date('d/m/Y H:i', strtotime($donation->created_at)) }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -317,6 +360,15 @@
                         },
                     })
                 })
+
+                const cardHeader = document.querySelector('.card-header');
+                const description = document.querySelector('.collapse');
+
+                cardHeader.addEventListener('click', function() {
+                    const expanded = description.classList.contains('show') ? 'false' : 'true';
+                    description.classList.toggle('show');
+                    this.querySelector('.card-link').setAttribute('aria-expanded', expanded);
+                });
 
                 $('.btnDoarCartao').on('click', function (e) {
                     $('.formCard').removeClass('d-none');
