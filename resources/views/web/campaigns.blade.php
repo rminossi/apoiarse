@@ -34,6 +34,8 @@
                                                     <h3 style="height:150px">
                                                         <a href="{{route('web.campaign', ['slug' => $campaign->slug])}}">{{$campaign->title}}</a>
                                                     </h3>
+                                                    <p class="fh5co-lead">Meta: {{$campaign->goal ? "R$" . $campaign->goal : "Sem meta"}}<br></p>
+                                                    <p class="fh5co-lead">Total Arrecadado: R$ {{$campaign->totalDonations}}<br></p>
                                                     <a href="{{route('web.campaign', ['slug' => $campaign->slug])}}"
                                                        class="btn btn-primary p-3 col-12">{{"Apoiar!"}}</a>
                                                 </div>
@@ -67,6 +69,8 @@
                                                     <h3 style="height:150px">
                                                         <a href="{{route('web.campaign', ['slug' => $campaign->slug])}}">{{$campaign->title}}</a>
                                                     </h3>
+                                                    <p class="fh5co-lead">Meta: {{$campaign->goal ? "R$" . $campaign->goal : "Sem meta"}}<br></p>
+                                                    <p class="fh5co-lead">Total Arrecadado: R$ {{$campaign->totalDonations}}<br></p>
                                                     <a href="{{route('web.campaign', ['slug' => $campaign->slug])}}"
                                                        class="btn btn-primary p-3 col-12">{{"Ver Campanha"}}</a>
                                                 </div>
