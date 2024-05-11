@@ -81,6 +81,8 @@
                         <div class="col-md-8 heading-section animate-box">
                             <h3>{{$campaign->title}}</h3>
                             <p>{!!html_entity_decode($campaign->description)!!}</p>
+                            <h2><strong>Responsável - {{$campaign->user->name}}</strong></h2>
+                            <h2><strong>CPF - {{explode('.',trim($campaign->user->cpf))[0]}}.***.***-**</strong></h2>
                             <div class="row text-center justify-content-center">
                                 <span><a class="btn btn-primary btn-lg" href="#apoiar">{{$campaign->status == 1 ? 'Apoiar essa campanha' : 'Ver Campanha'}}</a></span>
                             </div>

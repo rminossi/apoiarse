@@ -37,6 +37,11 @@ class Campaign extends Model
         return $this->hasMany(Donation::class, 'campaign_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function cover()
     {
         $cover = $this->images()->where('cover', 1)->first();
