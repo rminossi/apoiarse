@@ -62,8 +62,7 @@
 					<div class="blog-text">
 						<div class="prod-title">
 							<h3><a href="{{route('web.campaign', ['slug' => $campaign->slug])}}">{{$campaign->title}}</a></h3>
-							<p>{!!$campaign->description!!}</p>
-                            <a href="{{route('web.campaign', ['slug' => $campaign->slug])}}" class="btn btn-primary p-3 col-12">{{"Ver Campanha"}}</a>
+							<a href="{{route('web.campaign', ['slug' => $campaign->slug])}}" class="btn btn-primary p-3 col-12">{{"Ver Campanha"}}</a>
 						</div>
 					</div>
 				</div>
