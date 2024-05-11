@@ -79,7 +79,15 @@
                                 <form method="POST" action="{{ route('usuario.campanhas.update', ['campanha' => $campaign->id]) }}">
                                     {{ csrf_field() }}
                                     {{ method_field('delete') }}
-                                    <button class="btn btn-red icon-trash-o" type="submit">Excluir Campanha</button>
+                                    <button class="btn {{ $campaign->status == 1 ? 'btn-red' : 'btn-blue' }} icon-trash-o" {{$campaign->status == 3 ? 'disabled' : ''}} type="submit">
+                                        @if($campaign->status == 1)
+                                            Desativar Campanha
+                                        @elseif($campaign->status == 3)
+                                            Campanha Encerrada
+                                        @else
+                                            Ativar Campanha
+                                        @endif
+                                    </button>
                                 </form>
                             </div>
                         </div>

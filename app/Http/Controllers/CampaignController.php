@@ -198,14 +198,17 @@ class CampaignController extends Controller
         return response()->json($json);
     }
 
-    public function destroy(Campaign $campaign){
-        $campaign->delete();
+    public function destroy($campaign){
+        $campaign = Campaign::where('id', $campaign)->first();
+        $campaign->update([
+            'status' => $campaign->status == 1 ? 2 : 1
+        ]);
         $user = auth()->user();
 
         if($user->is_admin) {
             return redirect()-> route('admin.campaigns.index')->with(['message' => 'Campaign deletada com sucesso!']);
         }
-        return redirect()-> route('users.campaigns.index')->with(['message' => 'Campaign deletada com sucesso!']);
+        return redirect()-> route('usuario.campanhas.index')->with(['message' => 'Campaign deletada com sucesso!']);
 
     }
 }

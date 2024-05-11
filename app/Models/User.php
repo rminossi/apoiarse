@@ -45,6 +45,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'donations_count',
+        'donations_total'
+    ];
+
     public function generateToken() {
         $this->api_token = str_random(60);
         $this->save();
@@ -80,5 +85,13 @@ class User extends Authenticatable
         return $this->hasMany(Donation::class);
     }
 
+    public function getDonationsCountAttribute()
+    {
+        return $this->donations()->where('status', 3)->count();
+    }
 
+    public function getDonationsTotalAttribute()
+    {
+        return $this->donations()->where('status', 3)->sum('amount');
+    }
 }

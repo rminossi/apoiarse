@@ -170,9 +170,9 @@ class AuthController extends Controller
             $user = Auth::user();
             return view('users.dashboard', [
                 'campaigns' => $user->campaigns,
-                'donations' => $user->donations,
+                'donations' => $user->donationsCount,
                 'last_campaigns' => $user->campaigns()->orderBy('created_at', 'DESC')->limit(3)->get(),
-                'last_donations' => $user->donations()->orderBy('created_at', 'DESC')->limit(3)->get(),
+                'last_donations' => $user->donations()->where('status', 3)->orderBy('created_at', 'DESC')->limit(3)->get(),
             ]);
         }
     }

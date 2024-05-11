@@ -10,7 +10,7 @@
                 <section class="app_dash_home_stats" style="justify-content: space-around">
                     <article class="control radius">
                         <h4 class="icon-users">Apoios Realizados</h4>
-                        <h1 class="mt-3 text-center"><b>{{$donations->count()}}</b></h1>
+                        <h1 class="mt-3 text-center"><b>{{$donations}}</b></h1>
                     </article>
                     <article class="control radius">
                         <h4 class="icon-table">Campanhas</h4>
@@ -75,7 +75,7 @@
                                         </div>
                                         <div class="realty_list_item_card_content">
                                             <span class="realty_list_item_description_title">Meta:</span>
-                                            <span class="realty_list_item_description_content">R$ {{number_format(floatval(str_replace('.', '', $campaign->goal)), 2, ',', '.')}}</span></span>
+                                            <span class="realty_list_item_description_content">{{$campaign->goal ? 'R$' . $campaign->goal : 'Sem Meta'}}</span></span>
                                         </div>
                                     </div>
                                     <div class="realty_list_item_card">
@@ -84,7 +84,7 @@
                                         </div>
                                         <div class="realty_list_item_card_content">
                                             <span class="realty_list_item_description_title">Total de apoios:</span>
-                                            <span class="realty_list_item_description_content">{{$campaign->donations()->count()}}</span></span>
+                                            <span class="realty_list_item_description_content">{{$campaign->numberOfDonations}}</span></span>
                                         </div>
                                     </div>
                                     <div class="realty_list_item_card">
@@ -93,7 +93,7 @@
                                         </div>
                                         <div class="realty_list_item_card_content">
                                             <span class="realty_list_item_description_title">Total Arrecadado:</span>
-                                            <span class="realty_list_item_description_content">R$ {{number_format($campaign->donations()->where('status', '1')->sum('amount'), 2, ',', '.')}}</span></span>
+                                            <span class="realty_list_item_description_content">R$ {{$campaign->totalDonations}}</span></span>
                                         </div>
                                     </div>
                                     @if($campaign->goal)
@@ -103,7 +103,7 @@
                                             </div>
                                             <div class="realty_list_item_card_content">
                                                 <span class="realty_list_item_description_title">Total Faltante</span>
-                                                <span class="realty_list_item_description_content">R$ {{number_format(floatval(str_replace('.', '', $campaign->goal)) - $campaign->donations()->where('status', '1')->sum('amount'), 2, ',', '.')}}</span></span>
+                                                <span class="realty_list_item_description_content">R$ {{$campaign->missingAmount}}</span></span>
                                             </div>
                                         </div>
                                     @endif
@@ -116,7 +116,14 @@
                                               action="{{ route('usuario.campanhas.update', ['campanha' => $campaign->id]) }}">
                                             {{ csrf_field() }}
                                             {{ method_field('delete') }}
-                                            <button class="btn btn-red icon-trash-o" type="submit">Excluir Campanha
+                                            <button class="btn {{ $campaign->status == 1 ? 'btn-red' : 'btn-blue' }} icon-trash-o" {{$campaign->status == 3 ? 'disabled' : ''}} type="submit">
+                                                @if($campaign->status == 1)
+                                                    Desativar Campanha
+                                                @elseif($campaign->status == 3)
+                                                    Campanha Encerrada
+                                                @else
+                                                    Ativar Campanha
+                                                @endif
                                             </button>
                                         </form>
                                     </div>
