@@ -34,7 +34,7 @@
                     @foreach($users as $user)
                         <tr>
                             <td>{{$user->id}}</td>
-                            <td><a href="" class="text-orange">{{$user->fullName}}</a></td>
+                            <td><a href="" class="text-orange">{{$user->name}}</a></td>
                             <td>{{$user->cpf}}</td>
                             <td><a href="mailto:{{$user->email}}" class="text-orange">{{$user->email}}</a></td>
                             <td>{{$user->phone}}</td>
