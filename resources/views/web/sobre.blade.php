@@ -1,6 +1,6 @@
 	@extends('web.master.master')
 	@section('content')
-		<div id="fh5co-contact" class="animate-box">
+		<div id="fh5co-contact" class="animate-box pb-0">
 			<div class="container" style="margin-top: 30px;margin-bottom: 30px">
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2 text-center heading-section">
