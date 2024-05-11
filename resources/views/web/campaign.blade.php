@@ -197,7 +197,7 @@
                             </h1>
                         </div>
                         <div id="description1" class="collapse" aria-labelledby="heading1">
-                            <div class="card-body">
+                            <div class="card-body p-0">
                                 <div class="dash_content_app_box_stage">
                                     <table id="dataTable" class="nowrap" style="width: 100%; border-collapse: collapse;">
                                         <thead>
@@ -210,7 +210,7 @@
                                         </thead>
                                         <tbody>
                                         @foreach($campaign->donations as $index => $donation)
-                                            <tr style="background-color: {{ $index % 2 == 0 ? '#f8f9fa' : 'white' }};">
+                                            <tr class="text-center" style="background-color: {{ $index % 2 == 0 ? '#f8f9fa' : 'white' }};">
                                                 <td style="border: 1px solid #dee2e6; max-width: 200px; word-wrap: break-word; white-space: normal;">
                                                     {{ explode(' ', trim($donation->user->name))[0] }} ********
                                                 </td>

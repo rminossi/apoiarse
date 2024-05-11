@@ -18,7 +18,7 @@
                                     </div>
                                     <div class="fh5co-text">
                                         <h3 class="font-weight-bold">Quem Somos</h3>
-                                        <p>A Apoiar-se é uma iniciativa sem fins lucrativos, com o ideal de apoiar as pessoas que mais precisam. A Apoiar-se tem como objetivo apoiar instituções e pessoas que precisam de apoio.</p>
+                                        <p>A Apoiar-se é uma iniciativa sem fins lucrativos, com o ideal de apoiar as pessoas que mais precisam. Nosso objetivo é auxiliar instituções e pessoas que precisam de apoio financeiro e não tem os recursos necessários disponíveis</p>
                                     </div>
                                 </div>
                             </div>
@@ -69,8 +69,8 @@
                                         <h2 class="mt-3 font-weight-bold">Como funciona?</h2>
                                         <p class="font-size-sm">Os usuários devem se cadastrar para poderem criar suas campanhas ou contribuirem para campanhas existentes. A cada contribuição, o valor do apoio fica disponível na conta da plataforma, disponível para saque pelo criador da campanha.</p>
                                         <hr>
-                                        <h2 class="mt-3 font-weight-bold">Onde o dinheiro fica armazenado?</h2>
-                                        <p class="font-size-sm">Como o projeto foi desenvolvido de forma emergencial, não foi possível ainda criar um CNPJ e uma conta para a plataforma, então o dinheiro estará disponível através de uma conta do sistema de pagamento, ou do criador da plataforma (Rafael Carlos Minossi Nahas) por exigência do sistema de pagamentos, o que será alterado assim que possível.</p>
+                                        <h2 class="mt-3 font-weight-bold">Porque a chave Pix não é de uma empresa?</h2>
+                                        <p class="font-size-sm">Como o projeto foi desenvolvido de forma emergencial, não foi possível ainda criar um CNPJ e uma conta para a plataforma, então o dinheiro estará disponível através de uma conta do sistema de pagamento, ou do criador da plataforma (Rafael Carlos Minossi Nahas) por exigência do sistema de pagamentos. A obtenção do CNPJ está sendo providenciada.</p>
                                         <hr>
                                         <h2 class="mt-3 font-weight-bold">Como vou saber se o valor realmente foi contabilizado na campanha?</h2>
                                         <p class="font-size-sm">Na página da campanha, existe uma sessão de contribuições, onde é possível auditar se o valor foi contabilizado, além do criador da campanha ter a lista de contribuidores no painel e do contribuidor ter a lista de campanhas que ajudou também no painel.</p>
