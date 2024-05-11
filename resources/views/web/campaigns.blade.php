@@ -29,7 +29,7 @@
                             <a href="{{route('web.campaign', ['slug' => $campaign->slug])}}"><img class="img-responsive" src="{{url($campaign->cover())}}" alt=""></a>
                             <div class="blog-text">
                                 <div class="prod-title">
-                                    <h3><a href="" #>{{$campaign->title}}</a></h3>
+                                    <h3><a href="{{route('web.campaign', ['slug' => $campaign->slug])}}">{{$campaign->title}}</a></h3>
                                     <a href="{{route('web.campaign', ['slug' => $campaign->slug])}}" class="btn btn-primary p-3 col-12">{{"Apoiar!"}}</a>
                                 </div>
                             </div>
@@ -58,9 +58,9 @@
                             <a href="{{route('web.campaign', ['slug' => $campaign->slug])}}"><img class="img-responsive" src="{{url($campaign->cover())}}" alt=""></a>
                             <div class="blog-text">
                                 <div class="prod-title">
-                                    <h3><a href="" #>{{$campaign->title}}</a></h3>
+                                    <h3><a href="{{route('web.campaign', ['slug' => $campaign->slug])}}">{{$campaign->title}}</a></h3>
                                     <p>{{$campaign->description}}</p>
-                                    <a href="" class="btn btn-primary">{{"Comprar - R$".$campaign->price}}</a>
+                                    <a href="{{route('web.campaign', ['slug' => $campaign->slug])}}" class="btn btn-primary p-3 col-12">{{"Ver Campanha"}}</a>
                                 </div>
                             </div>
                         </div>
