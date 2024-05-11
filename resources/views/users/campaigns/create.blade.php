@@ -50,7 +50,7 @@
                         <div id="data">
                             <label class="label">
                                 <span class="legend">*Título Site:</span>
-                                <input type="text" name="title" placeholder="Insira o título da campanha" value="{{old('name')}}"/>
+                                <input type="text" name="title" placeholder="Insira o título da campanha" value="{{old('title')}}"/>
                             </label>
                             <div class="label">
                                 <label class="label">

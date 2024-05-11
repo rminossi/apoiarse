@@ -24,6 +24,9 @@ class Campaign extends FormRequest
      */
     public function rules()
     {
+        //converter para float se o valor for string no formato "R$ 0,00"
+        $this->request->set('goal', str_replace(',', '.', $this->request->get('goal')));
+
         return [
             'title' => 'required',
             'description' => 'required',
