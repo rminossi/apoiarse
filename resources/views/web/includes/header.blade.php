@@ -12,6 +12,9 @@
                     <li class="{{request()->routeIs('web.campaigns') ? 'active' : ''}}">
                         <a href="{{route('web.campaigns')}}">Campanhas</a>
                     </li>
+                    <li class="{{request()->routeIs('web.sobre') ? 'active' : ''}}">
+                        <a href="{{route('web.sobre')}}">Sobre</a>
+                    </li>
                     <li>
                     <li class="{{request()->routeIs('web.contato') ? 'active' : ''}}">
                         <a href="{{route('web.contato')}}">Contato</a>

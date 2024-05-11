@@ -29,6 +29,7 @@ Route::group(['namespace' => 'Web', 'as' => 'web.'], function () {
     Route::post('/getPixQrCode', [DonationController::class, 'getPixQrCode'])->name('getPixQrCode');
     Route::post('/payWithCard', [DonationController::class, 'payWithCard'])->name('payWithCard');
     Route::get('/minhas-doacoes', [WebController::class, 'minhasDoacoes'])->name('my-donations');
+    Route::get('/sobre', [WebController::class, 'sobre'])->name('sobre');
 });
 
 //only access if user is_admin

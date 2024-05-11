@@ -102,6 +102,20 @@ class WebController extends Controller
         ]);
     }
 
+
+    public function sobre()
+    {
+        $head = $this->seo->render(
+            'Apoiar-se Online - Sobre',
+            'Apoiar-se Online - Sobre',
+            route('web.sobre'),
+            asset('assets/frontend/images/apoiarse_logo.png')
+        );
+        return view('web.sobre', [
+            'head' => $head
+        ]);
+    }
+
     public function enviarContato(Request $request)
     {
         $data = [
