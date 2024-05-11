@@ -209,7 +209,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($campaign->totalDonations as $index => $donation)
+                                        @foreach($campaign->donations()->where('status', 3)->get() as $index => $donation)
                                             <tr class="text-center" style="background-color: {{ $index % 2 == 0 ? '#f8f9fa' : 'white' }};">
                                                 <td style="border: 1px solid #dee2e6; max-width: 200px; word-wrap: break-word; white-space: normal;">
                                                     {{ explode(' ', trim($donation->user->name))[0] }} ********
