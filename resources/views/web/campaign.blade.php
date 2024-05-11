@@ -218,7 +218,7 @@
                                                     {{ explode('.', trim($donation->user->cpf))[0] }}.***.***-**
                                                 </td>
                                                 <td style="border: 1px solid #dee2e6;">
-                                                    R$ {{ number_format($donation->value, 2, ',', '.') }}
+                                                    R$ {{ number_format($donation->amount, 2, ',', '.') }}
                                                 </td>
                                                 <td style="border: 1px solid #dee2e6;">
                                                     {{ date('d/m/Y H:i', strtotime($donation->created_at)) }}
