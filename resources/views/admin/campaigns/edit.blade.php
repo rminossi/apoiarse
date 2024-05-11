@@ -42,29 +42,40 @@
                         <a href="#donations" class="nav_tabs_item_link">Doações</a>
                     </li>
                 </ul>
-                <form class="app_form" action="{{route('admin.campaigns.update', ['campaign' => $campaign->id])}}" method="post" enctype="multipart/form-data">
+                <form class="app_form" action="{{route('admin.campaigns.update', ['campaign' => $campaign->id])}}"
+                      method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="nav_tabs_content">
                         <div id="data">
                             <label class="label">
                                 <span class="legend">*Título Site:</span>
-                                <input type="text" name="title" placeholder="Insira o título da campanha" value="{{old('title') ?? $campaign->title}}"/>
+                                <input type="text" name="title" placeholder="Insira o título da campanha"
+                                       value="{{old('title') ?? $campaign->title}}"/>
                             </label>
                             <div class="label">
                                 <label class="label">
                                     <span class="legend">*Descrição da Campanha:</span>
-                                    <textarea name="description" cols="30" rows="10" id="mytextarea">{{old('description') ?? $campaign->description}}</textarea>
+                                    <textarea name="description" cols="30" rows="10"
+                                              id="mytextarea">{{old('description') ?? $campaign->description}}</textarea>
                                 </label>
                             </div>
                             <div class="label_g3">
                                 <label class="label">
                                     <span class="legend">*Tipo:</span>
                                     <select name="type">
-                                        <option {{ (old('type') == 'sick' ? 'selected' : '') }} value="sick">Doença</option>
-                                        <option {{ (old('type') == 'residential-accident' ? 'selected' : '') }} value="residential-accident">Acidente Residencial</option>
-                                        <option {{ (old('type') == 'public-calamity' ? 'selected' : '') }} value="public-calamity">Calamidade Pública</option>
-                                        <option {{ (old('type') == 'other' ? 'selected' : '') }} value="other">Outro</option>
+                                        <option {{ (old('type') == 'sick' ? 'selected' : '') }} value="sick">Doença
+                                        </option>
+                                        <option
+                                            {{ (old('type') == 'residential-accident' ? 'selected' : '') }} value="residential-accident">
+                                            Acidente Residencial
+                                        </option>
+                                        <option
+                                            {{ (old('type') == 'public-calamity' ? 'selected' : '') }} value="public-calamity">
+                                            Calamidade Pública
+                                        </option>
+                                        <option {{ (old('type') == 'other' ? 'selected' : '') }} value="other">Outro
+                                        </option>
                                     </select>
                                 </label>
                             </div>
@@ -78,8 +89,10 @@
                                     <span class="legend">*Status:</span>
                                     <select name="status">
                                         <option value="1" {{ (old('status') == '1' ? 'selected' : '') }}>Ativo</option>
-                                        <option value="2" {{ (old('status') == '2' ? 'selected' : '') }}>Inativo</option>
-                                        <option value="3" {{ (old('status') == '3' ? 'selected' : '') }}>Encerrado</option>
+                                        <option value="2" {{ (old('status') == '2' ? 'selected' : '') }}>Inativo
+                                        </option>
+                                        <option value="3" {{ (old('status') == '3' ? 'selected' : '') }}>Encerrado
+                                        </option>
                                     </select>
                                 </label>
                             </div>
@@ -96,7 +109,8 @@
                                 <div class="property_image">
                                     @foreach($campaign->images()->get() as $image)
                                         <div class="property_image_item">
-                                            <img style="object-fit: cover; width: 300px; height: 300px" src="{{url('storage/'.$image->image->path)}}">
+                                            <img style="object-fit: cover; width: 300px; height: 300px"
+                                                 src="{{url('storage/'.$image->image->path)}}">
                                             <div class="property_image_actions">
                                                 <a href="javascript:void(0)"
                                                    class="btn btn-small {{ ($image->image->cover == true ? 'btn-green' : '') }} icon-check icon-notext image-set-cover"
@@ -111,60 +125,80 @@
                             </div>
                         </div>
                         <div id="donations" class="d-none">
-                            <div style="display: block;
-    overflow-x: auto;
-    white-space: nowrap;">
-                            <table id="dataTable" class="nowrap stripe" width="100" style="width: 100% !important;">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Situação</th>
-                                    <th>Nome Completo</th>
-                                    <th>Campanha</th>
-                                    <th>Valor</th>
-                                    <th>Data</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($donations as $donation)
+                            <div style="display: block;overflow-x: auto;white-space: nowrap;">
+                                <table id="dataTable" class="nowrap stripe" width="100" style="width: 100% !important;">
+                                    <thead>
+                                    <tr>
+                                        <th>Situação</th>
+                                        <th>Nome Completo</th>
+                                        <th>Campanha</th>
+                                        <th>Valor</th>
+                                        <th>Data</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($donations as $donation)
                                         <tr>
-                                            <td></td>
-                                            <td class="bg-yellow">{{$donation->status}}</td>
+                                            <td class="{{$donation->status == 3 ? 'bg-green' : ($donation->status == 2 ? 'bg-red' : 'bg-yellow')}}">{{$donation->status == 3 ? 'Recebido' : ($donation->status == 2 ? 'Cancelado' : 'Pendente') }}</td>
                                             <td>{{$donation->user->name}}</td>
                                             <td>{{$donation->campaign->title}}</td>
                                             <td>{{$donation->amount}}</td>
                                             <td>{{$donation->created_at}}</td>
                                         </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                                    @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                     <div class="text-right mt-2">
-                        <button class="btn btn-large btn-green icon-check-square-o" type="submit">Salvar alterações</button>
+                        <button class="btn btn-large btn-green icon-check-square-o" type="submit">Salvar alterações
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </section>
     <script>
-        CKEDITOR.replace( 'description', {
+        CKEDITOR.replace('description', {
             toolbar: [
-                { name: 'document', groups: [ 'mode', 'document', 'doctools' ], items: [ 'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates' ] },
-                { name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-                { name: 'editing', groups: [ 'find', 'selection', 'spellchecker' ], items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Scayt' ] },
-                { name: 'forms', items: [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
+                {
+                    name: 'document',
+                    groups: ['mode', 'document', 'doctools'],
+                    items: ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']
+                },
+                {
+                    name: 'clipboard',
+                    groups: ['clipboard', 'undo'],
+                    items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']
+                },
+                {
+                    name: 'editing',
+                    groups: ['find', 'selection', 'spellchecker'],
+                    items: ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt']
+                },
+                {
+                    name: 'forms',
+                    items: ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField']
+                },
                 '/',
-                { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
-                { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
-                { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+                {
+                    name: 'basicstyles',
+                    groups: ['basicstyles', 'cleanup'],
+                    items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']
+                },
+                {
+                    name: 'paragraph',
+                    groups: ['list', 'indent', 'blocks', 'align', 'bidi'],
+                    items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language']
+                },
+                {name: 'links', items: ['Link', 'Unlink', 'Anchor']},
                 '/',
-                { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
-                { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
-                { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
-                { name: 'others', items: [ '-' ] },
-                { name: 'about', items: [ 'About' ] }
+                {name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize']},
+                {name: 'colors', items: ['TextColor', 'BGColor']},
+                {name: 'tools', items: ['Maximize', 'ShowBlocks']},
+                {name: 'others', items: ['-']},
+                {name: 'about', items: ['About']}
             ]
         });
     </script>
@@ -198,20 +232,20 @@
                 });
             });
 
-            $('.image-set-cover').click(function(event){
+            $('.image-set-cover').click(function (event) {
                 event.preventDefault();
 
                 var button = $(this);
 
-                $.post(button.data('action'), {}, function(response){
-                    if(response.success === true) {
+                $.post(button.data('action'), {}, function (response) {
+                    if (response.success === true) {
                         $('.property_image').find('a.btn-green').removeClass('btn-green');
                         button.addClass('btn-green');
                     }
                 }, 'json');
             });
 
-            $('.image-remove').click(function(event){
+            $('.image-remove').click(function (event) {
                 event.preventDefault();
 
                 var button = $(this);
@@ -219,9 +253,9 @@
                     url: button.data('action'),
                     type: 'DELETE',
                     dataType: 'json',
-                    success: function(response){
-                        if(response.success === true) {
-                            button.closest('.property_image_item').fadeOut(function(){
+                    success: function (response) {
+                        if (response.success === true) {
+                            button.closest('.property_image_item').fadeOut(function () {
                                 $(this).remove();
                             });
                         }

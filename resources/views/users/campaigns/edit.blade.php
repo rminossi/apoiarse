@@ -140,15 +140,7 @@
                                         <tbody>
                                         @foreach($donations as $donation)
                                             <tr>
-                                                <td>
-                                                    @if($donation->status == 1)
-                                                        Pendente
-                                                    @elseif($donation->status == 2)
-                                                        Expirado
-                                                    @else
-                                                        Aprovado
-                                                    @endif
-                                                </td>
+                                                <td class="{{$donation->status == 3 ? 'bg-green' : ($donation->status == 2 ? 'bg-red' : 'bg-yellow')}}">{{$donation->status == 3 ? 'Recebido' : ($donation->status == 2 ? 'Cancelado' : 'Pendente') }}</td>
                                                 <td>{{$donation->user->name}}</td>
                                                 <td>R$ {{number_format($donation->amount, 2, ',', '.')}}</td>
                                                 <td>{{date('d/m/Y H:i', strtotime($donation->created_at))}}</td>
