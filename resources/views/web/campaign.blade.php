@@ -69,7 +69,7 @@
                     <div class="desc animate-box">
                         <h2>{{$campaign->title}}</h2>
                         <span>{{$campaign->model}}</span>
-                        <span><a class="btn btn-primary btn-lg" href="#apoiar">Apoiar essa campanha</a></span>
+                        <span><a class="btn btn-primary btn-lg" href="#apoiar">{{$campaign->status == 1 ? 'Apoiar essa campanha' : 'Ver Campanha'}}</a></span>
                     </div>
                 </div>
             </div>
@@ -82,7 +82,7 @@
                             <h3>{{$campaign->title}}</h3>
                             <p>{!!html_entity_decode($campaign->description)!!}</p>
                             <div class="row text-center justify-content-center">
-                                <span><a class="btn btn-primary btn-lg" href="#apoiar">Apoiar essa campanha</a></span>
+                                <span><a class="btn btn-primary btn-lg" href="#apoiar">{{$campaign->status == 1 ? 'Apoiar essa campanha' : 'Ver Campanha'}}</a></span>
                             </div>
                         </div>
                     </div>
@@ -110,32 +110,33 @@
                                     </p>
                                 </div>
                             </div>
-                            <h4 class="fh5co-number">Apoiar!</h4>
-                            <div class="mt-3">
-                                <div class="col text-center">
-                                    <p class="text-center h2" style="margin-top: 10px;margin-bottom: 10px">
-                                        Apoiar essa campanha
-                                    </p>
-                                    <span class="text-center h3">Doe o quanto você puder, mas não deixe de doar!!</span>
-                                </div>
-                                <div class="row d-flex justify-content-center mt-3">
-                                    <label class="col-12 p-5 mt-3 h3 text-center">Valor do apoio</label>
-                                    <input class="col-4 p-4 mt-3 text-center h3" id="amount" name="amount" required value="0,00">
-                                </div>
-                                <div class="row d-flex justify-content-center mt-3">
-                                    <div class="row col-lg-4 d-flex justify-content-center my-3">
-                                        @if(Auth::check())
-                                            <div class="row justify-content-center">
-                                                <div class="col-12">
-                                                    <form>
-                                                        <input type="hidden" name="campaign_id" value="{{$campaign->id}}">
-                                                        <input type="hidden" name="user_id" id="user_id">
-                                                        <input type="hidden" name="amount">
-                                                        <button class="btn btn-primary p-5 mt-3 btnDoarPix col-12" type="button">Apoiar com PIX</button>
-                                                    </form>
-                                                    <div class="formPix d-none mt-3">
-                                                        <div class="row">
-                                                            <!-- show qrcode -->
+                            @if($campaign->status == 1)
+                                <h4 class="fh5co-number">Apoiar!</h4>
+                                <div class="mt-3">
+                                    <div class="col text-center">
+                                        <p class="text-center h2" style="margin-top: 10px;margin-bottom: 10px">
+                                            Apoiar essa campanha
+                                        </p>
+                                        <span class="text-center h3">Doe o quanto você puder, mas não deixe de doar!!</span>
+                                    </div>
+                                    <div class="row d-flex justify-content-center mt-3">
+                                        <label class="col-12 p-5 mt-3 h3 text-center">Valor do apoio</label>
+                                        <input class="col-4 p-4 mt-3 text-center h3" id="amount" name="amount" required value="0,00">
+                                    </div>
+                                    <div class="row d-flex justify-content-center mt-3">
+                                        <div class="row col-lg-4 d-flex justify-content-center my-3">
+                                            @if(Auth::check())
+                                                <div class="row justify-content-center">
+                                                    <div class="col-12">
+                                                        <form>
+                                                            <input type="hidden" name="campaign_id" value="{{$campaign->id}}">
+                                                            <input type="hidden" name="user_id" id="user_id">
+                                                            <input type="hidden" name="amount">
+                                                            <button class="btn btn-primary p-5 mt-3 btnDoarPix col-12" type="button">Apoiar com PIX</button>
+                                                        </form>
+                                                        <div class="formPix d-none mt-3">
+                                                            <div class="row">
+                                                                <!-- show qrcode -->
                                                                 <div class="col-md-12">
                                                                     <div class="qrcode-container">
                                                                         <div class="col-12 text-center">
@@ -146,44 +147,45 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 mt-3 mt-lg-0">
+                                                        <button class="btn btn-primary p-5 mt-3 btnDoarCartao col-12" type="button">Apoiar com Cartão</button>
+                                                        <div class="formCard d-none mt-3">
+                                                            <h4 class="my-3">Dados do Cartão</h4>
+                                                            <div class="card-js">
+                                                                <input required class="card-number my-custom-class" name="card-number" placeholder="Número do Cartão">
+                                                                <input required class="name" id="the-card-name-id" name="card-holders-name" placeholder="Nome (igual ao Cartão)">
+                                                                <input required class="expiry-month" name="expiry-month">
+                                                                <input required class="expiry-year" name="expiry-year">
+                                                                <input required class="cvc" name="cvc">
+                                                            </div>
+                                                            <div class="cardData mt-3">
+                                                                <h4 class="my-3">Dados do Proprietário do Cartão</h4>
+                                                                <input required class="name my-1 px-3 col-12" id="name" name="cardName" placeholder="Nome">
+                                                                <input required class="name my-1 px-3 col-12" id="email" name="cardEmail" placeholder="Email">
+                                                                <input required class="cpf my-1 px-3 col-12" id="cpf" name="cardCpf" placeholder="CPF">
+                                                                <input required class="name my-1 px-3 col-12" id="phone" name="cardPhone" placeholder="Celular">
+                                                                <input required class="name my-1 px-3 col-12" id="address" name="cardAddressComplement" placeholder="Endereço">
+                                                                <input required class="name my-1 px-3 col-12" id="number" name="cardAddressNumber" placeholder="Número">
+                                                                <input required class="name my-1 px-3 col-12" id="postal-code" name="cardPostalCode" placeholder="CEP">
+                                                            </div>
+                                                            <h4 class="my-4">Após o pagamento, os dados ficarão disponíveis na sua conta, no menu "Meus Apoios"</h4>
+                                                            <button id="payWithCard" class="btn btn-primary p-2" type="button">Apoiar</button>
+                                                            <h4 class="my-3 py-2 d-none" style="color: white;background: #2b542c" id="pagtoAprovado">Pagamento Aprovado</h4>
+                                                            <h4 class="my-3 py-2 d-none" style="color: white;background: #a94442" id="pagtoNaoAprovado">Pagamento Não Aprovado</h4>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-12 mt-3 mt-lg-0">
-                                                    <button class="btn btn-primary p-5 mt-3 btnDoarCartao col-12" type="button">Apoiar com Cartão</button>
-                                                    <div class="formCard d-none mt-3">
-                                                        <h4 class="my-3">Dados do Cartão</h4>
-                                                        <div class="card-js">
-                                                            <input required class="card-number my-custom-class" name="card-number" placeholder="Número do Cartão">
-                                                            <input required class="name" id="the-card-name-id" name="card-holders-name" placeholder="Nome (igual ao Cartão)">
-                                                            <input required class="expiry-month" name="expiry-month">
-                                                            <input required class="expiry-year" name="expiry-year">
-                                                            <input required class="cvc" name="cvc">
-                                                        </div>
-                                                        <div class="cardData mt-3">
-                                                            <h4 class="my-3">Dados do Proprietário do Cartão</h4>
-                                                            <input required class="name my-1 px-3 col-12" id="name" name="cardName" placeholder="Nome">
-                                                            <input required class="name my-1 px-3 col-12" id="email" name="cardEmail" placeholder="Email">
-                                                            <input required class="cpf my-1 px-3 col-12" id="cpf" name="cardCpf" placeholder="CPF">
-                                                            <input required class="name my-1 px-3 col-12" id="phone" name="cardPhone" placeholder="Celular">
-                                                            <input required class="name my-1 px-3 col-12" id="address" name="cardAddressComplement" placeholder="Endereço">
-                                                            <input required class="name my-1 px-3 col-12" id="number" name="cardAddressNumber" placeholder="Número">
-                                                            <input required class="name my-1 px-3 col-12" id="postal-code" name="cardPostalCode" placeholder="CEP">
-                                                        </div>
-                                                        <h4 class="my-4">Após o pagamento, os dados ficarão disponíveis na sua conta, no menu "Meus Apoios"</h4>
-                                                        <button id="payWithCard" class="btn btn-primary p-2" type="button">Apoiar</button>
-                                                        <h4 class="my-3 py-2 d-none" style="color: white;background: #2b542c" id="pagtoAprovado">Pagamento Aprovado</h4>
-                                                        <h4 class="my-3 py-2 d-none" style="color: white;background: #a94442" id="pagtoNaoAprovado">Pagamento Não Aprovado</h4>
-                                                    </div>
-                                                </div>
-                                            </div>
 
-                                        @else
-                                                    <a class="col-md-8 btn btn-primary p-5 mt-3 btnLogin" href="{{ route('sessao.login', ['campaign' => $campaign->slug]) }}">Entrar para apoiar</a>
-                                        @endif
+                                            @else
+                                                <a class="col-md-8 btn btn-primary p-5 mt-3 btnLogin" href="{{ route('sessao.login', ['campaign' => $campaign->slug]) }}">Entrar para apoiar</a>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>

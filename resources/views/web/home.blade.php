@@ -30,7 +30,7 @@
                                         class="img-responsive" src="{{url($campaign->cover())}}" alt=""></a>
                                 <div class="blog-text">
                                     <div class="prod-title">
-                                        <h3 style="height:150px"><a
+                                        <h3 style="height:120px"><a
                                                 href="{{route('web.campaign', ['slug' => $campaign->slug])}}">{{$campaign->title}}</a>
                                         </h3>
                                         <p class="fh5co-lead">Meta: {{$campaign->goal ? "R$" . $campaign->goal : "Sem meta"}}<br></p>
@@ -69,7 +69,7 @@
                                 <a href=""><img class="img-responsive" src="{{url($campaign->cover())}}" alt=""></a>
                                 <div class="blog-text">
                                     <div class="prod-title">
-                                        <h3 style="height:150px"><a
+                                        <h3 style="height:120px"><a
                                                 href="{{route('web.campaign', ['slug' => $campaign->slug])}}">{{$campaign->title}}</a>
                                         </h3>
                                         <p class="fh5co-lead">Meta: {{$campaign->goal ? "R$" . $campaign->goal : "Sem meta"}}<br></p>
