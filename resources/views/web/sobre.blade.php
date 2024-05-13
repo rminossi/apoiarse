@@ -18,7 +18,7 @@
                                     </div>
                                     <div class="fh5co-text">
                                         <h3 class="font-weight-bold">Quem Somos</h3>
-                                        <p>A Apoiar-se é uma iniciativa sem fins lucrativos, com o ideal de apoiar as pessoas que mais precisam. Nosso objetivo é auxiliar instituções e pessoas que precisam de apoio financeiro e não tem os recursos necessários disponíveis</p>
+                                        <p>A Apoiar-se é uma iniciativa sem fins lucrativos, com o ideal de fazer vaquinhas e campanhas de arrecadação sem cobrança de taxas como em outras plataformas, é uma plataforma voluntária.</p>
                                     </div>
                                 </div>
                             </div>
@@ -51,7 +51,7 @@
                                         <h3>Perguntas frequentes</h3>
                                         <hr>
                                         <h2 class="mt-3 font-weight-bold">Tarifas e prazos</h2>
-                                        <p class="font-size-sm">A Apoiar-se possui realmente as menores tarifas do mercado, por se tratar de uma iniciativa sem fins lucrativos, que visa diminuir ao máximo a perda de quem precisa de apoio ao usar recursos tecnológicos para obter ajuda, não cobramos taxas para a manutenção da plataforma, somente as taxas cobradas por adminitradoras de pagamento para fazermos as operações financeiras.</p>
+                                        <p class="font-size-sm">A Apoiar-se possui realmente as menores tarifas do mercado, por se tratar de uma iniciativa sem fins lucrativos (nenhum centavo da sua campanha fica com a gente :) ), que visa diminuir ao máximo a perda de quem precisa de apoio ao usar recursos tecnológicos para obter ajuda, não cobramos taxas para a manutenção da plataforma, somente as taxas cobradas por adminitradoras de pagamento para fazermos as operações financeiras.</p>
                                         <p class="font-size-sm">As taxas são as seguintes:</p>
                                         <ul style="list-style: none">
                                             <li>Doação via PIX: 0,99% ou R$ 0,99 (o que for mais barato)</li>
