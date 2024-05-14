@@ -21,8 +21,9 @@
                     <article class="users radius">
                         <h4 class="icon-bar-chart">Doações</h4>
                         <p><b>Total:</b> {{$donations->count()}}</p>
-                        <p><b>Pagas:</b> {{$donations->where('status', '1')->count()}}</p>
-                        <p><b>Pendentes:</b> {{$donations->where('status', '3')->count()}}</p>
+                        <p><b>Pagas:</b> {{$donations->where('status', '3')->count()}}</p>
+                        <p><b>Pendentes:</b> {{$donations->where('status', '1')->count()}}</p>
+                        <p><b>Não pagas:</b> {{$donations->where('status', '2')->count()}}</p>
                     </article>
                 </section>
             </div>
