@@ -4,7 +4,7 @@
     <div style="flex-basis: 100%;">
         <section class="dash_content_app">
             <header class="dash_content_app_header">
-                <h2 class="icon-tachometer">Dashboard</h2>
+                <h2 class="icon-tachometer">Painel</h2>
             </header>
             <div class="dash_content_app_box">
                 <section class="app_dash_home_stats">
@@ -15,15 +15,14 @@
                     <article class="blog radius">
                         <h4 class="icon-table">Campanhas</h4>
                         <p class="mt-2"><b>Ativas:</b> {{$campaigns->where('status', '1')->count()}}</p>
-                        <p><b>Aguardando:</b> {{$campaigns->where('status', '2')->count()}}</p>
+                        <p><b>Inativas:</b> {{$campaigns->where('status', '2')->count()}}</p>
                         <p><b>Encerradas:</b> {{$campaigns->where('status', '3')->count()}}</p>
                     </article>
                     <article class="users radius">
                         <h4 class="icon-bar-chart">Doações</h4>
-                        <p><b>Disponibilizadas:</b> {{$donations->count()}}</p>
-                        <p><b>Disponíveis:</b> {{$donations->where('status', '1')->count()}}</p>
-                        <p><b>Compradas:</b> {{$donations->where('status', '3')->count()}}</p>
-                        <p><b>Reservadas:</b> {{$donations->where('status', '2')->count()}}</p>
+                        <p><b>Total:</b> {{$donations->count()}}</p>
+                        <p><b>Pagas:</b> {{$donations->where('status', '1')->count()}}</p>
+                        <p><b>Pendentes:</b> {{$donations->where('status', '3')->count()}}</p>
                     </article>
                 </section>
             </div>
