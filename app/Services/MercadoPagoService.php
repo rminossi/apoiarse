@@ -61,7 +61,8 @@ class MercadoPagoService
         $response = $this->client->request('POST', 'https://api.mercadopago.com/v1/payments', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $this->accessToken,
-                'Content-Type' => 'application/json'
+                'Content-Type' => 'application/json',
+                'X-Idempotency-Key' => $customer_id . '_' . now()
             ],
             'body' => $payment
         ]);
