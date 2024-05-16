@@ -8,6 +8,8 @@
                 <h2><strong>Venha apoiar conosco</strong></h2>
                 <span><a class="btn btn-primary btn-lg"
                          href="{{route('web.campaigns')}}">Ver nossas campanhas</a></span>
+                <span><a class="btn btn-primary btn-lg"
+                         href="usuario/campanhas/create">Criar campanha</a></span>
             </div>
         </div>
     </div>

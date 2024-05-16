@@ -3,6 +3,7 @@
 @section('content')
     <div style="flex-basis: 100%;">
         <section class="dash_content_app">
+            <button class="btn btn-blue" id="go-to-create" style="width: 100%;padding: 30px">Criar Campanha</button>
             <header class="dash_content_app_header">
                 <h2 class="icon-tachometer">Painel</h2>
             </header>
@@ -127,4 +128,12 @@
             </div>
         </section>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#go-to-create").click(function () {
+                window.location.href = "campanhas/create";
+            });
+        });
+    </script>
 @endsection
