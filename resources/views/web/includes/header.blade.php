@@ -20,7 +20,7 @@
                         <a href="{{route('web.contato')}}">Contato</a>
                     </li>
                     <li>
-                        <a href="usuario/campanhas/create">Criar Campanha</a>
+                        <a href="{{route('usuario.campanhas.create')}}">Criar Campanha</a>
                     <li>
                         <a href="{{route('usuario.home')}}">{{Auth::check() ? "Painel" : 'Entrar'}}</a>
                     </li>

@@ -49,7 +49,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 Route::group(['prefix' => 'usuario', 'as' => 'usuario.'], function () {
     Route::group(['middleware' => ['auth']], function () {
         Route::get('inicio', [AuthController::class, 'home'])->name('home');
-        Route::resource('campanhas', CampaignController::class);
+        Route::resource('campanhas', CampaignController::class)->names('campanhas');
         Route::get('apoios', [DonationController::class, 'myDonations'])->name('my-donations');
         Route::delete('remove-image', [CampaignController::class, 'removeImage'])->name('campaigns.removeImage');
         Route::post('image-set-cover', [CampaignController::class, 'imageSetCover'])->name('campaigns.imageSetCover');
