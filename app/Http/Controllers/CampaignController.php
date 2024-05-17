@@ -190,7 +190,7 @@ class CampaignController extends Controller
 
     public function removeImage(Request $request){
         $imageDelete = ImageCampaign::where('id', $request->image)->first();
-        Storage::delete($imageDelete->path);
+        Storage::delete($imageDelete->image->path);
         $imageDelete->delete();
         $json = [
             'success' => true
