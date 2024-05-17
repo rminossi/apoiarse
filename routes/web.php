@@ -30,6 +30,7 @@ Route::group(['namespace' => 'Web', 'as' => 'web.'], function () {
     Route::post('/payWithCard', [DonationController::class, 'payWithCard'])->name('payWithCard');
     Route::get('/minhas-doacoes', [WebController::class, 'minhasDoacoes'])->name('my-donations');
     Route::get('/sobre', [WebController::class, 'sobre'])->name('sobre');
+    Route::get('/test-log', [WebController::class, 'testLog'])->name('test-log');
 });
 
 //only access if user is_admin

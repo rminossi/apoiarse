@@ -13,6 +13,7 @@ use App\Support\Message;
 use App\Support\Seo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
@@ -161,5 +162,10 @@ class WebController extends Controller
             ]);
         }
         return view('web.minhas_doacoes');
+    }
+
+    public function testLog(): void
+    {
+        Log::debug('aaaaaaaaa');
     }
 }
