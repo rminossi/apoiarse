@@ -30,7 +30,7 @@ class Campaign extends FormRequest
         return [
             'title' => 'required',
             'description' => 'required',
-            'goal' => 'nullable|numeric',
+            'goal' => 'nullable|string',
             'type' => 'required',
             'status' => 'required',
         ];
