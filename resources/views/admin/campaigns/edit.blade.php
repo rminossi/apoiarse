@@ -64,17 +64,17 @@
                                 <label class="label">
                                     <span class="legend">*Tipo:</span>
                                     <select name="type">
-                                        <option {{ (old('type') == 'sick' ? 'selected' : '') }} value="sick">Doença
+                                        <option {{ (old('type') ?? $campaign->type == 'sick' ? 'selected' : '') }} value="sick">Doença
                                         </option>
                                         <option
-                                            {{ (old('type') == 'residential-accident' ? 'selected' : '') }} value="residential-accident">
+                                            {{ (old('type') ?? $campaign->type == 'residential-accident' ? 'selected' : '') }} value="residential-accident">
                                             Acidente Residencial
                                         </option>
                                         <option
-                                            {{ (old('type') == 'public-calamity' ? 'selected' : '') }} value="public-calamity">
+                                            {{ (old('type') ?? $campaign->type == 'public-calamity' ? 'selected' : '') }} value="public-calamity">
                                             Calamidade Pública
                                         </option>
-                                        <option {{ (old('type') == 'other' ? 'selected' : '') }} value="other">Outro
+                                        <option {{ (old('type') ?? $campaign->type == 'other' ? 'selected' : '') }} value="other">Outro
                                         </option>
                                     </select>
                                 </label>
