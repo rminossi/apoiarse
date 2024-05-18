@@ -137,7 +137,7 @@
                         $('.content_image').append(
                             '<div class="property_image_item">' +
                             '<div class="embed radius" ' +
-                            'style="background-image: url(' + value.target.result + ') background-size: cover; background-position: center center;">' +
+                            'style="background-image: url(' + value.target.result + '); background-size: cover; background-position: center center;">' +
                             '</div>' +
                             '</div>');
                     };
