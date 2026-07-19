@@ -1,115 +1,49 @@
-@extends('web.master.master')
+@extends('layouts.public')
+
 @section('content')
-    <div class="fh5co-hero fh5co-hero-2">
-        <div class="fh5co-overlay"></div>
-        <div class="fh5co-cover fh5co-cover_2 text-center" data-stellar-background-ratio="0.5"
-             style="background-image: url('{{asset('assets/frontend/images/apoiarse.png')}}');">
-            <div class="desc animate-box">
-                <h2><strong>Nossas Campanhas</strong></h2>
-                <span><strong>Confira abaixo as campanhas atuais e também as finalizadas.</strong></span>
-            </div>
-        </div>
+<div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    <div class="mb-8">
+        <h1 class="section-title">Campanhas</h1>
+        <p class="section-subtitle">Encontre causas para apoiar ou crie a sua</p>
     </div>
-    <!-- end:header-top -->
-    <div id="fh5co-portfolio">
-        <div class="container">
-            @if(sizeof($activeCampaigns) > 0)
-                <div class="row">
-                    <div class="col-md-6 col-md-offset-3 text-center heading-section animate-box">
-                        <h3>Campanhas Ativas</h3>
-                        <p>Confira nossas campanhas ativas, o que significa que ainda dá tempo de apoiar!</p>
-                    </div>
-                </div>
-                @isset($activeCampaigns)
-                    <div class="row row-bottom-padded-md">
-                        <div class="col-md-12">
-                            <ul id="fh5co-portfolio-list">
-                                @foreach($activeCampaigns as $campaign)
-                                    <div class="col-lg-4 col-md-4">
-                                        <div class="fh5co-blog animate-box">
-                                            <a href="{{route('web.campaign', ['slug' => $campaign->slug])}}"><img
-                                                    class="img-responsive" src="{{url($campaign->cover())}}" alt=""></a>
-                                            <div class="blog-text">
-                                                <div class="prod-title">
-                                                    <h3 style="height:120px">
-                                                        <a href="{{route('web.campaign', ['slug' => $campaign->slug])}}">{{$campaign->title}}</a>
-                                                    </h3>
-                                                    <p class="fh5co-lead">Meta: {{$campaign->goal ? "R$" . $campaign->goal : "Sem meta"}}<br></p>
-                                                    <p class="fh5co-lead">Total Arrecadado: R$ {{$campaign->totalDonations}}<br></p>
-                                                    <a href="{{route('web.campaign', ['slug' => $campaign->slug])}}"
-                                                       class="btn btn-primary p-3 col-12">{{"Apoiar!"}}</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                @endisset
-            @endif
-            @if(sizeof($finishedCampaigns) > 0)
-                <div class="row">
-                    <div class="col-md-6 col-md-offset-3 text-center heading-section animate-box">
-                        <h3>Campanhas Encerradas</h3>
-                        <p>Confira nossas campanhas encerradas.</p>
-                    </div>
-                </div>
-                @isset($finishedCampaigns)
-                    <div class="row row-bottom-padded-md">
-                        <div class="col-md-12">
-                            <ul id="fh5co-portfolio-list">
-                                @foreach($finishedCampaigns as $campaign)
-                                    <div class="col-lg-4 col-md-4">
-                                        <div class="fh5co-blog animate-box">
-                                            <a href="{{route('web.campaign', ['slug' => $campaign->slug])}}"><img
-                                                    class="img-responsive" src="{{url($campaign->cover())}}" alt=""></a>
-                                            <div class="blog-text">
-                                                <div class="prod-title">
-                                                    <h3 style="height:120px">
-                                                        <a href="{{route('web.campaign', ['slug' => $campaign->slug])}}">{{$campaign->title}}</a>
-                                                    </h3>
-                                                    <p class="fh5co-lead">Meta: {{$campaign->goal ? "R$" . $campaign->goal : "Sem meta"}}<br></p>
-                                                    <p class="fh5co-lead">Total Arrecadado: R$ {{$campaign->totalDonations}}<br></p>
-                                                    <a href="{{route('web.campaign', ['slug' => $campaign->slug])}}"
-                                                       class="btn btn-primary p-3 col-12">{{"Ver Campanha"}}</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                @endisset
+
+    <form method="GET" action="{{ route('web.campaigns') }}" class="mb-8 space-y-4 rounded-xl bg-white p-4 shadow-sm ring-1 ring-stone-200">
+        <div class="grid gap-4 md:grid-cols-4">
+            <input type="search" name="q" value="{{ request('q') }}" placeholder="Buscar..." class="input-field md:col-span-2">
+            <select name="category" class="input-field">
+                <option value="">Todas categorias</option>
+                @foreach($categories as $cat)
+                    <option value="{{ $cat->slug }}" @selected(request('category') === $cat->slug)>{{ $cat->name }}</option>
+                @endforeach
+            </select>
+            <select name="status" class="input-field">
+                <option value="active" @selected(request('status', 'active') === 'active')>Ativas</option>
+                <option value="finished" @selected(request('status') === 'finished')>Encerradas</option>
+                <option value="all" @selected(request('status') === 'all')>Todas</option>
+            </select>
+        </div>
+        <div class="flex flex-wrap items-center gap-4">
+            <select name="sort" class="input-field w-auto">
+                <option value="recent" @selected(request('sort', 'recent') === 'recent')>Mais recentes</option>
+                <option value="supporters" @selected(request('sort') === 'supporters')>Mais apoiadas</option>
+                <option value="almost_goal" @selected(request('sort') === 'almost_goal')>Quase na meta</option>
+            </select>
+            <button type="submit" class="btn-primary">Filtrar</button>
+            @if(request()->hasAny(['q', 'category', 'status', 'sort']))
+                <a href="{{ route('web.campaigns') }}" class="text-sm text-stone-500 hover:text-brand-600">Limpar filtros</a>
             @endif
         </div>
-    </div>
-    <script>
-        // Get the modal
-        var modal = document.getElementById("myModal");
+    </form>
 
-        // Get the button that opens the modal
-        var btn = document.getElementById("myBtn");
-
-        // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
-
-        // When the user clicks on the button, open the modal
-        btn.onclick = function () {
-            modal.style.display = "block";
-        }
-
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function () {
-            modal.style.display = "none";
-        }
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    </script>
+    @if($campaigns->isEmpty())
+        <x-empty-state title="Nenhuma campanha encontrada" description="Tente outros filtros ou crie uma nova campanha." :action="route('usuario.campanhas.create')" />
+    @else
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            @foreach($campaigns as $campaign)
+                <x-campaign-card :campaign="$campaign" />
+            @endforeach
+        </div>
+        <div class="mt-8">{{ $campaigns->links() }}</div>
+    @endif
+</div>
 @endsection

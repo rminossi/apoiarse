@@ -1,5 +1,4 @@
 <div class="dash_content_search">
-
     <div class="dash_content_search_close">
         <p class="text-right">
             <button class="btn btn-red icon-times icon-notext search_close"></button>
@@ -7,48 +6,44 @@
     </div>
 
     <header>
-        <h3 class="icon-search">Pesquisar por Imóveis:</h3>
+        <h3 class="icon-search">Filtrar campanhas</h3>
     </header>
 
     <main>
-        <form action="">
+        <form action="{{ route('admin.campaigns.index') }}" method="GET">
             <label>
-                <span>Nome:</span>
-                <input type="text">
+                <span>Título:</span>
+                <input type="text" name="q" value="{{ request('q') }}">
             </label>
 
             <label>
-                <span>Documento:</span>
-                <input type="text">
+                <span>Categoria:</span>
+                <select name="category_id">
+                    <option value="">Todas</option>
+                    @foreach($categories ?? [] as $category)
+                        <option value="{{ $category->id }}" @selected(request('category_id') == $category->id)>{{ $category->name }}</option>
+                    @endforeach
+                </select>
             </label>
 
-            <div class="label_double">
-                <label class="label_50">
-                    <span>Documento:</span>
-                    <input type="text" size="2">
-                </label>
-
-                <label class="label_50">
-                    <span>Documento:</span>
-                    <input type="text" size="2">
-                </label>
-            </div>
-
-            <div class="label_double">
-                <label class="label_50">
-                    <span>Documento:</span>
-                    <input type="text" size="2">
-                </label>
-
-                <label class="label_50">
-                    <span>Documento:</span>
-                    <input type="text" size="2">
-                </label>
-            </div>
+            <label>
+                <span>Status:</span>
+                <select name="status">
+                    <option value="">Todos</option>
+                    <option value="1" @selected(request('status') == '1')>Ativo</option>
+                    <option value="2" @selected(request('status') == '2')>Inativo</option>
+                    <option value="3" @selected(request('status') == '3')>Encerrado</option>
+                </select>
+            </label>
 
             <label>
-                <span>Documento:</span>
-                <input type="text">
+                <span>Criador:</span>
+                <select name="user_id">
+                    <option value="">Todos</option>
+                    @foreach($users ?? [] as $u)
+                        <option value="{{ $u->id }}" @selected(request('user_id') == $u->id)>{{ $u->name }}</option>
+                    @endforeach
+                </select>
             </label>
 
             <button class="btn btn-block btn-large btn-green icon-search">Filtrar</button>

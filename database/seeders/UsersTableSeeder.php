@@ -8,22 +8,20 @@ use Illuminate\Support\Facades\Hash;
 
 class UsersTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
-        $password = Hash::make('admin');
+        if (User::where('email', env('ADMIN_EMAIL', 'admin@apoiarse.com'))->exists()) {
+            return;
+        }
 
-        User::create([
-            'name' => 'Administrator',
-            'email' => 'admin@test.com',
-            'password' => $password,
-            'cpf' => '00000000000',
-            'phone' => '0000000000',
-            'is_admin' => true,
+        $user = User::create([
+            'name' => env('ADMIN_NAME', 'Administrator'),
+            'email' => env('ADMIN_EMAIL', 'admin@apoiarse.com'),
+            'password' => Hash::make(env('ADMIN_PASSWORD', 'change-me-on-first-login')),
+            'cpf' => env('ADMIN_CPF', '52998224725'),
+            'phone' => env('ADMIN_PHONE', '51999999999'),
         ]);
+
+        $user->forceFill(['is_admin' => true])->save();
     }
 }

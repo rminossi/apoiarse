@@ -60,15 +60,13 @@
                             </div>
                             <div class="label_g2">
                                 <label class="label">
-                                    <span class="legend">*Tipo:</span>
+                                    <span class="legend">*Tipo (legado):</span>
                                     <select name="type">
-                                        <option {{ (old('type') == 'sick' ? 'selected' : '') }} value="sick">Doença</option>
-                                        <option {{ (old('type') == 'residential-accident' ? 'selected' : '') }} value="residential-accident">Acidente Residencial</option>
-                                        <option {{ (old('type') == 'public-calamity' ? 'selected' : '') }} value="public-calamity">Calamidade Pública</option>
-                                        <option {{ (old('type') == 'other' ? 'selected' : '') }} value="other">Outro</option>
+                                        <option value="other">Outro</option>
                                     </select>
                                 </label>
                             </div>
+                            @include('admin.campaigns.partials.extra-fields', ['categories' => $categories ?? []])
                             <div class="label_g2">
                                 <label class="label mr-2">
                                     <span class="legend">Meta (R$) - deixar em branco para sem limite:</span>

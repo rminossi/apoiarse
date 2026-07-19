@@ -9,163 +9,211 @@ use App\Services\MercadoPagoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DonationController extends Controller
 {
+    public function __construct(
+        private AsaasService $asaasService,
+        private MercadoPagoService $mercadoPagoService
+    ) {}
 
-    private $asaasService;
-    private $mercadoPagoService;
-
-    public function __construct(AsaasService $asaasService, MercadoPagoService $mercadoPagoService)
-    {
-        $this->asaasService = $asaasService;
-        $this->mercadoPagoService = $mercadoPagoService;
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function update(Request $request, $id)
     {
-        $donation = Donation::where('id', $id)->first();
+        $validated = $request->validate([
+            'status' => 'required|integer|in:1,2,3',
+        ]);
+
+        $donation = Donation::findOrFail($id);
         $campaign_id = $donation->campaign_id;
-        $status = $request->status;
-        if($status === 1) {
-            $request->request->add(['user_id' => null]);
+        $data = ['status' => $validated['status']];
+
+        if ((int) $validated['status'] === 1) {
+            $data['user_id'] = null;
         }
-        $request->request->add(['status' => $status]);
-        if(!$donation->update($request->all())) {
-            return redirect()->back()->withInput()->withErrors();
-        }
+
+        $donation->update($data);
+
         return redirect()->route('admin.campaigns.edit', [
             'campaign' => $campaign_id,
-            'donations' => true
-        ])->with(['message' => 'Campaign atualizada com sucesso!']);
+            'donations' => true,
+        ])->with(['message' => 'Doação atualizada com sucesso!']);
     }
 
     public function myDonations()
     {
         $user = auth()->user();
         $donations = $user->donations()->paginate();
+
         return view('users.donations.index', [
-            'donations' => $donations
+            'donations' => $donations,
         ]);
     }
 
     public function getPixQrCode(Request $request)
     {
-        DB::beginTransaction();
+        $request->validate([
+            'campaign_id' => 'required|integer|exists:campaigns,id',
+            'amount' => 'required|string',
+        ]);
+
         $user = Auth::user();
-        $campaign = Campaign::where('id', $request->campaign_id)->first();
-        //remove R$ da string
-        $amount = str_replace('R$ ', '', $request->amount);
-        $amount = str_replace('.', '', $amount);
-        $amount = str_replace(',', '.', $amount);
-
-        if ($amount > 200) {
-            $cobranca = $this->asaasService->getPixQrCodeAsaas($user, $amount);
-
-            Donation::create([
-                'user_id' => $user->id,
-                'campaign_id' => $campaign->id,
-                'amount' => $amount,
-                'asaas_operation_id' => $cobranca['operation_id'],
-                'payment_method' => 'PIX',
-                'status' => 1,
-                'pix_qrcode' => $cobranca['qrCode']['encodedImage'],
-                'pix_key' => $cobranca['qrCode']['qrCode']
-            ]);
-
-        } else {
-            $cobranca = $this->mercadoPagoService->getQrCodeMercadoPago($user, $amount);
-            Donation::create([
-                'user_id' => $user->id,
-                'campaign_id' => $campaign->id,
-                'amount' => $amount,
-                'mp_operation_id' => $cobranca['operation_id'],
-                'payment_method' => 'PIX',
-                'status' => 1,
-                'pix_qrcode' => $cobranca['qrCode']['encodedImage'],
-                'pix_key' => isset($cobranca['qrCode']['qrCode'])
-            ]);
+        if (! $user) {
+            return response()->json(['error' => 'Autenticação necessária.'], 401);
         }
-        DB::commit();
+
+        $campaign = Campaign::findOrFail($request->campaign_id);
+
+        if ((int) $campaign->status !== 1) {
+            return response()->json(['error' => 'Esta campanha não está ativa para receber doações.'], 422);
+        }
+
+        $amount = $this->parseAmount($request->amount);
+
+        if ($amount <= 0) {
+            return response()->json(['error' => 'Valor inválido.'], 422);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            if ($amount > 200) {
+                $cobranca = $this->asaasService->getPixQrCodeAsaas($user, $amount);
+
+                Donation::create([
+                    'user_id' => $user->id,
+                    'campaign_id' => $campaign->id,
+                    'amount' => $amount,
+                    'asaas_operation_id' => $cobranca['operation_id'],
+                    'payment_method' => 'PIX',
+                    'status' => 1,
+                    'pix_qrcode' => $cobranca['qrCode']['encodedImage'],
+                    'pix_key' => $cobranca['qrCode']['qrCode'],
+                ]);
+            } else {
+                $cobranca = $this->mercadoPagoService->getQrCodeMercadoPago($user, $amount);
+
+                Donation::create([
+                    'user_id' => $user->id,
+                    'campaign_id' => $campaign->id,
+                    'amount' => $amount,
+                    'mp_operation_id' => $cobranca['operation_id'],
+                    'payment_method' => 'PIX',
+                    'status' => 1,
+                    'pix_qrcode' => $cobranca['qrCode']['encodedImage'],
+                    'pix_key' => $cobranca['qrCode']['qrCode'] ?? null,
+                ]);
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Erro ao gerar PIX', ['error' => $e->getMessage()]);
+
+            return response()->json(['error' => 'Erro ao processar pagamento. Tente novamente.'], 500);
+        }
 
         return [
             'slug' => $campaign->slug,
             'confirmed' => 'confirmar',
-            'qrCode' => $cobranca['qrCode']
+            'qrCode' => $cobranca['qrCode'],
         ];
     }
 
     public function payWithCard(Request $request)
     {
-        DB::beginTransaction();
-        $user = Auth::user();
-        $campaign = Campaign::where('id', $request->campaign_id)->first();
-        $cardNumber = $request['cardNumber'];
-        $cardHolderName = $request['cardHoldersName'];
-        $cardCvv = $request['cardCvv'];
-        $cardMonth = $request['cardMonth'];
-        $cardYear = $request['cardYear'];
-        $cardPhone = $request['cardPhone'];
-        $cardEmail = $request['cardEmail'];
-        $cardCpf = $request['cardCpf'];
-        $cardPostalCode = $request['cardPostalCode'];
-        $cardAddressNumber = $request['cardAddressNumber'];
-        $cardAddressComplement = $request['cardAddressComplement'];
+        $request->validate([
+            'campaign_id' => 'required|integer|exists:campaigns,id',
+            'amount' => 'required|string',
+            'cardNumber' => 'required|string',
+            'cardHoldersName' => 'required|string',
+            'cardCvv' => 'required|string',
+            'cardMonth' => 'required|string',
+            'cardYear' => 'required|string',
+            'cardPhone' => 'required|string',
+            'cardEmail' => 'required|email',
+            'cardCpf' => 'required|string',
+            'cardPostalCode' => 'required|string',
+            'cardAddressNumber' => 'required|string',
+            'cardAddressComplement' => 'nullable|string',
+        ]);
 
-        //remove R$ da string
-        $amount = str_replace('R$ ', '', $request->amount);
+        $user = Auth::user();
+        if (! $user) {
+            return response()->json(['error' => 'Autenticação necessária.'], 401);
+        }
+
+        $campaign = Campaign::findOrFail($request->campaign_id);
+
+        if ((int) $campaign->status !== 1) {
+            return response()->json(['error' => 'Esta campanha não está ativa para receber doações.'], 422);
+        }
+
+        $amount = $this->parseAmount($request->amount);
+
+        if ($amount <= 0) {
+            return response()->json(['error' => 'Valor inválido.'], 422);
+        }
+
+        $cardCpf = preg_replace('/[^0-9]/', '', $request->cardCpf);
+        $cardPhone = preg_replace('/[^0-9]/', '', $request->cardPhone);
+
+        DB::beginTransaction();
+
+        try {
+            $cobranca = $this->asaasService->criarCobrancaCartao(
+                $user->asaas_id,
+                $amount,
+                'Apoiar-se Online',
+                $request->cardNumber,
+                $request->cardHoldersName,
+                $request->cardCvv,
+                $request->cardMonth,
+                $request->cardYear,
+                $cardPhone,
+                $request->cardEmail,
+                $cardCpf,
+                $request->cardPostalCode,
+                $request->cardAddressNumber,
+                $request->cardAddressComplement ?? '',
+                $request->ip()
+            );
+
+            if (isset($cobranca['errors'])) {
+                DB::rollBack();
+
+                return response()->json($cobranca, 422);
+            }
+
+            Donation::create([
+                'user_id' => $user->id,
+                'campaign_id' => $campaign->id,
+                'amount' => $amount,
+                'asaas_operation_id' => $cobranca['id'],
+                'payment_method' => 'CC',
+                'status' => 1,
+            ]);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Erro ao processar cartão', ['error' => $e->getMessage()]);
+
+            return response()->json(['error' => 'Erro ao processar pagamento.'], 500);
+        }
+
+        return [
+            'status' => $cobranca['status'],
+            'invoice' => $cobranca['invoiceUrl'] ?? null,
+        ];
+    }
+
+    private function parseAmount(string $amount): float
+    {
+        $amount = str_replace('R$ ', '', $amount);
         $amount = str_replace('.', '', $amount);
         $amount = str_replace(',', '.', $amount);
 
-        //sanitize cpf and phone
-        $cardCpf = preg_replace('/[^0-9]/', '', $cardCpf);
-        $cardPhone = preg_replace('/[^0-9]/', '', $cardPhone);
-
-        $cobranca = $this->asaasService->criarCobrancaCartao(
-            $user->asaas_id,
-            $amount,
-            'Apoiar-se Online',
-            $cardNumber,
-            $cardHolderName,
-            $cardCvv,
-            $cardMonth,
-            $cardYear,
-            $cardPhone,
-            $cardEmail,
-            $cardCpf,
-            $cardPostalCode,
-            $cardAddressNumber,
-            $cardAddressComplement,
-            $request->ip()
-        );
-
-        if (isset($cobranca['errors'])) {
-            DB::rollBack();
-            return $cobranca;
-        }
-
-        Donation::create([
-            'user_id' => $user->id,
-            'campaign_id' => $campaign->id,
-            'amount' => $amount,
-            'asaas_operation_id' => $cobranca['id'],
-            'payment_method' => 'CC',
-            'status' => 1
-        ]);
-
-        DB::commit();
-
-        return  [
-            'status' => $cobranca['status'],
-            'invoice' => $cobranca['invoiceUrl'],
-        ];
+        return (float) $amount;
     }
 }

@@ -12,18 +12,18 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-//        $schedule->call(function () {
-//            $numbers = Number::all();
-//            foreach ($numbers as $number) {
-//                $different_days = $number->updated_at->diffInDays(Date::now());
-//                if($number->status === 2 && $different_days > 5) {
-//                    $number->update([
-//                        'status' => 1,
-//                        'customer_id' => null
-//                    ]);
-//                }
-//            }
-//        })->daily();
+        //        $schedule->call(function () {
+        //            $numbers = Number::all();
+        //            foreach ($numbers as $number) {
+        //                $different_days = $number->updated_at->diffInDays(Date::now());
+        //                if($number->status === 2 && $different_days > 5) {
+        //                    $number->update([
+        //                        'status' => 1,
+        //                        'customer_id' => null
+        //                    ]);
+        //                }
+        //            }
+        //        })->daily();
     }
 
     /**

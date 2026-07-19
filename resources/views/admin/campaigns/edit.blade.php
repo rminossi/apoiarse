@@ -41,6 +41,9 @@
                     <li class="nav_tabs_item">
                         <a href="#donations" class="nav_tabs_item_link">Doações</a>
                     </li>
+                    <li class="nav_tabs_item">
+                        <a href="#updates" class="nav_tabs_item_link">Atualizações</a>
+                    </li>
                 </ul>
                 <form class="app_form" action="{{route('admin.campaigns.update', ['campaign' => $campaign->id])}}"
                       method="post" enctype="multipart/form-data">
@@ -61,24 +64,9 @@
                                 </label>
                             </div>
                             <div class="label_g3">
-                                <label class="label">
-                                    <span class="legend">*Tipo:</span>
-                                    <select name="type">
-                                        <option {{ (old('type') ?? $campaign->type == 'sick' ? 'selected' : '') }} value="sick">Doença
-                                        </option>
-                                        <option
-                                            {{ (old('type') ?? $campaign->type == 'residential-accident' ? 'selected' : '') }} value="residential-accident">
-                                            Acidente Residencial
-                                        </option>
-                                        <option
-                                            {{ (old('type') ?? $campaign->type == 'public-calamity' ? 'selected' : '') }} value="public-calamity">
-                                            Calamidade Pública
-                                        </option>
-                                        <option {{ (old('type') ?? $campaign->type == 'other' ? 'selected' : '') }} value="other">Outro
-                                        </option>
-                                    </select>
-                                </label>
+                                <input type="hidden" name="type" value="{{ old('type', $campaign->type ?? 'other') }}">
                             </div>
+                            @include('admin.campaigns.partials.extra-fields', ['categories' => $categories ?? []])
                             <div class="label_g2">
                                 <label class="label mr-2">
                                     <span class="legend">Meta (R$) - deixar em branco para sem limite:</span>
@@ -149,6 +137,26 @@
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+                        <div id="updates" class="d-none">
+                            <h3>Publicar atualização</h3>
+                            <form action="{{ route('admin.campaigns.updates.store', $campaign->id) }}" method="POST" class="app_form mb-4">
+                                @csrf
+                                <label class="label"><span class="legend">Título</span><input type="text" name="title" required></label>
+                                <label class="label"><span class="legend">Conteúdo</span><textarea name="body" rows="4" required></textarea></label>
+                                <label class="label"><input type="checkbox" name="is_pinned" value="1"> Fixar no topo</label>
+                                <button type="submit" class="btn btn-green">Publicar</button>
+                            </form>
+                            @foreach($updates ?? [] as $update)
+                                <div class="message message-green mb-2">
+                                    <strong>{{ $update->title }}</strong> — {{ $update->created_at->format('d/m/Y') }}
+                                    <p>{{ $update->body }}</p>
+                                    <form action="{{ route('admin.campaigns.updates.destroy', $update->id) }}" method="POST" style="display:inline">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="btn btn-red btn-small">Remover</button>
+                                    </form>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                     <div class="text-right mt-2">

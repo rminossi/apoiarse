@@ -19,4 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/webhook', [CobrancasController::class, 'webhook'])->name('cobrancas.webhook');
+Route::post('/webhook', [CobrancasController::class, 'webhook'])
+    ->middleware('throttle:60,1')
+    ->name('cobrancas.webhook');

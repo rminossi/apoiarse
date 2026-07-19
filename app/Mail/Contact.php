@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -31,13 +30,13 @@ class Contact extends Mailable
     public function build()
     {
         return $this->replyTo($this->data['reply_email'], $this->data['reply_email'])
-                    ->to('contato@apoiar-se.online', 'Contato')
-                    ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
-                    ->subject("Contato - Site")
-                    ->markdown('email.contact', [
-                        'reply_name' => $this->data['reply_name'],
-                        'reply_email' => $this->data['reply_email'],
-                        'message' => $this->data['message']
-                    ]);
+            ->to('contato@apoiar-se.online', 'Contato')
+            ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
+            ->subject('Contato - Site')
+            ->markdown('email.contact', [
+                'reply_name' => $this->data['reply_name'],
+                'reply_email' => $this->data['reply_email'],
+                'message' => $this->data['message'],
+            ]);
     }
 }

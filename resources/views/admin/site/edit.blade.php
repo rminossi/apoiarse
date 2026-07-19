@@ -97,6 +97,18 @@
                                            value="{{old('cpf') ?? $site->cpf ?? ''}}"/>
                                 </label>
                             </div>
+                            <div class="label">
+                                <span class="legend">FAQ (JSON):</span>
+                                <textarea name="faq_json" rows="6" placeholder='[{"question":"...","answer":"..."}]'>{{ old('faq_json', json_encode($faq ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) }}</textarea>
+                            </div>
+                            <div class="label">
+                                <span class="legend">Depoimentos (JSON):</span>
+                                <textarea name="testimonials_json" rows="4" placeholder='[{"name":"...","text":"..."}]'>{{ old('testimonials_json', json_encode($testimonials ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) }}</textarea>
+                            </div>
+                            <div class="label">
+                                <span class="legend">Como funciona (JSON):</span>
+                                <textarea name="how_it_works_json" rows="4">{{ old('how_it_works_json', json_encode($howItWorks ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) }}</textarea>
+                            </div>
                         </div>
                     </div>
                     <div class="text-right mt-2">

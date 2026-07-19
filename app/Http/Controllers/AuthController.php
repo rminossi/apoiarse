@@ -3,42 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ResetPassword;
-use App\Models\Donation;
 use App\Models\Campaign;
+use App\Models\Donation;
 use App\Models\User;
 use App\Services\AsaasService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use function Symfony\Component\String\u;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-
     public function showRegisterForm()
     {
         if (Auth::check() === true) {
             return redirect()->route('admin.home');
         }
+
         return view('auth.register');
     }
 
     protected function register(Request $request)
     {
-        $request['cpf'] = preg_replace('/[^0-9]/', '', (string)$request->cpf);
-        $request['phone'] = preg_replace('/[^0-9]/', '', (string)$request->phone);
+        $request['cpf'] = preg_replace('/[^0-9]/', '', (string) $request->cpf);
+        $request['phone'] = preg_replace('/[^0-9]/', '', (string) $request->phone);
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'cpf' => ['required', 'cpf', 'min:11', 'max:11', 'unique:users'],
-            'phone' => ['required', 'min:10', 'max:11']
+            'phone' => ['required', 'min:10', 'max:11'],
         ]);
 
         if ($validator->fails()) {
             $json['message'] = $this->message->error($validator->errors()->first())->render();
+
             return response()->json($json);
         }
 
@@ -48,15 +50,18 @@ class AuthController extends Controller
             'cpf' => $request->cpf,
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
-            'is_admin' => false
         ]);
 
-        $asaasService = new AsaasService();
+        $asaasService = new AsaasService;
 
-        $asaas_user = $asaasService->createCustomer($user->name, $user->cpf, $user->email, $user->phone, $user->id);
-        $user->update([
-            'asaas_id' => $asaas_user['id']
-        ]);
+        try {
+            $asaas_user = $asaasService->createCustomer($user->name, $user->cpf, $user->email, $user->phone, $user->id);
+            $user->update([
+                'asaas_id' => $asaas_user['id'],
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Erro ao criar cliente Asaas', ['user_id' => $user->id, 'error' => $e->getMessage()]);
+        }
 
         Auth::login($user, true);
         if (Auth::user()->is_admin) {
@@ -70,6 +75,7 @@ class AuthController extends Controller
                 $json['redirect'] = route('usuario.home');
             }
         }
+
         return response()->json($json);
     }
 
@@ -94,20 +100,23 @@ class AuthController extends Controller
     public function forgotPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => ['required', 'string', 'email', 'max:255']
+            'email' => ['required', 'string', 'email', 'max:255'],
         ]);
         if ($validator->fails()) {
             $json['message'] = $this->message->error($validator->errors()->first())->render();
+
             return response()->json($json);
         }
         $user = User::where('email', $request->email)->first();
-        if (!$user) {
+        if (! $user) {
             $json['message'] = $this->message->error('E-mail não encontrado.')->render();
+
             return response()->json($json);
         }
-        $user->update(['password_reset_token' => md5(uniqid(rand(), true))]);
+        $user->update(['password_reset_token' => Str::random(64)]);
         Mail::send(new ResetPassword(user: $user));
         $json['message'] = $this->message->success('Um link para redefinir sua senha foi enviado para seu e-mail.')->render();
+
         return response()->json($json);
     }
 
@@ -120,20 +129,22 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'token' => ['required', 'string'],
-            'password' => ['required', 'string', 'min:8', 'confirmed']
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
         if ($validator->fails()) {
             $json['message'] = $this->message->error($validator->errors()->first())->render();
+
             return response()->json($json);
         }
         $user = User::where('password_reset_token', $request->token)->first();
-        if (!$user) {
+        if (! $user) {
             $json['message'] = $this->message->error('Token inválido.')->render();
+
             return response()->json($json);
         }
         $user->update([
             'password' => Hash::make($request->password),
-            'password_reset_token' => null
+            'password_reset_token' => null,
         ]);
 
         Auth::login($user, true);
@@ -160,6 +171,7 @@ class AuthController extends Controller
             $donations = Donation::all();
             $users = User::all();
             $latest_campaigns = Campaign::orderBy('created_at', 'DESC')->limit(3)->get();
+
             return view('admin.dashboard', [
                 'campaigns' => $campaigns,
                 'donations' => $donations,
@@ -168,6 +180,7 @@ class AuthController extends Controller
             ]);
         } else {
             $user = Auth::user();
+
             return view('users.dashboard', [
                 'campaigns' => $user->campaigns,
                 'donations' => $user->donationsCount,
@@ -181,10 +194,12 @@ class AuthController extends Controller
     {
         if (in_array('', $request->only('email', 'password'))) {
             $json['message'] = $this->message->error('Informe todos os dados para avançar ;)')->render();
+
             return response()->json($json);
         }
-        if (!filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
+        if (! filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
             $json['message'] = $this->message->error('Email inválido')->render();
+
             return response()->json($json);
         }
 
@@ -193,8 +208,9 @@ class AuthController extends Controller
             'password' => $request->password,
         ];
 
-        if (!Auth::attempt($credentials)) {
+        if (! Auth::attempt($credentials)) {
             $json['message'] = $this->message->error('Email ou senha inválidos, favor checar os dados.')->render();
+
             return response()->json($json);
         }
         $this->authenticated($request->getClientIp());
@@ -209,12 +225,14 @@ class AuthController extends Controller
                 $json['redirect'] = route('usuario.home');
             }
         }
+
         return response()->json($json);
     }
 
     public function logout()
     {
         Auth::logout();
+
         return redirect()->route('web.home');
     }
 
@@ -223,7 +241,7 @@ class AuthController extends Controller
         $user = User::where('id', Auth::user()->id);
         $user->update([
             'last_login_at' => date('Y-m-d H:i:s'),
-            'last_login_ip' => $ip
+            'last_login_ip' => $ip,
         ]);
     }
 }

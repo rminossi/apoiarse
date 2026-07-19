@@ -31,12 +31,12 @@ class ResetPassword extends Mailable
     public function build()
     {
         return $this->replyTo('contato@apoiar-se.online', 'Contato')
-                    ->to($this->user->email, $this->user->name)
-                    ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
-                    ->subject("Apoiar-se Online - Redefinir senha")
-                    ->markdown('email.reset-password', [
-                        'name' => $this->user->name,
-                        'url' => route('sessao.resetPasswordForm', ['token' => $this->user->password_reset_token]),
-                    ]);
+            ->to($this->user->email, $this->user->name)
+            ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
+            ->subject('Apoiar-se Online - Redefinir senha')
+            ->markdown('email.reset-password', [
+                'name' => $this->user->name,
+                'url' => route('sessao.resetPasswordForm', ['token' => $this->user->password_reset_token]),
+            ]);
     }
 }

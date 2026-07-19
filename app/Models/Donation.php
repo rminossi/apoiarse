@@ -18,7 +18,7 @@ class Donation extends Model
         'payment_method',
         'status',
         'pix_qrcode',
-        'pix_key'
+        'pix_key',
     ];
 
     public function user()

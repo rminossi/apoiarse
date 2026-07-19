@@ -2,8 +2,6 @@
 
 namespace App\Validation;
 
-use Illuminate\Validation\Validator;
-
 class CpfValidation
 {
     public function validate($attribute, $value, $parameters, $validator)

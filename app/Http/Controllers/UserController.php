@@ -3,86 +3,93 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request as UserRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index()
+    public function index(): View
     {
-        $users = User::all();
-        return view('admin.users.index', [
-            'users' => $users
-        ]);
+        $users = User::orderBy('name')->paginate(20);
+
+        return view('admin.users.index', compact('users'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function create()
+    public function create(): View
     {
         return view('admin.users.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(UserRequest $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+            'cpf' => 'required|cpf|unique:users,cpf',
+            'phone' => 'nullable|string|max:20',
+            'bio' => 'nullable|string|max:2000',
+            'is_admin' => 'boolean',
+        ]);
+
+        User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'cpf' => $validated['cpf'],
+            'phone' => $validated['phone'] ?? '',
+            'bio' => $validated['bio'] ?? null,
+            'is_admin' => $request->boolean('is_admin'),
+        ]);
+
+        return redirect()->route('admin.users.index')->with('message', 'Usuário criado com sucesso!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function show(User $user): View
     {
-        //
+        return view('admin.users.show', compact('user'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function edit(User $user): View
     {
-        //
+        return view('admin.users.edit', compact('user'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,'.$user->id,
+            'password' => 'nullable|string|min:8|confirmed',
+            'cpf' => 'required|cpf|unique:users,cpf,'.$user->id,
+            'phone' => 'nullable|string|max:20',
+            'bio' => 'nullable|string|max:2000',
+            'public_slug' => 'nullable|string|max:100|unique:users,public_slug,'.$user->id,
+            'is_admin' => 'boolean',
+        ]);
+
+        $data = collect($validated)->except(['password', 'password_confirmation'])->toArray();
+        $data['is_admin'] = $request->boolean('is_admin');
+
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($validated['password']);
+        }
+
+        $user->update($data);
+
+        return redirect()->route('admin.users.index')->with('message', 'Usuário atualizado!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(User $user): RedirectResponse
     {
-        //
+        if ($user->id === auth()->id()) {
+            return back()->withErrors(['error' => 'Não é possível excluir seu próprio usuário.']);
+        }
+
+        $user->delete();
+
+        return redirect()->route('admin.users.index')->with('message', 'Usuário removido.');
     }
 }

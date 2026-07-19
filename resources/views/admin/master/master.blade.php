@@ -56,6 +56,7 @@
                         <li class="{{isActive('admin.campaigns.create')}}"><a href="{{route('admin.campaigns.create')}}">Criar Nova</a></li>
                     </ul>
                 </li>
+                <li class="dash_sidebar_nav_item {{isActive('admin.categories')}}"><a class="icon-list" href="{{route('admin.categories.index')}}">Categorias</a></li>
                 <li class="dash_sidebar_nav_item {{isActive('admin.sites')}}"><a class="icon-pencil" href="{{route('admin.site.edit', ['site' => '1'])}}">Configurações do site</a></li>
                 <li class="dash_sidebar_nav_item"><a class="icon-reply" href="{{route('web.home')}}">Ver Site</a></li>
                 <li class="dash_sidebar_nav_item"><a class="icon-sign-out on_mobile" href="{{route('sessao.logout')}}" target="_blank">Sair</a></li>

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,7 +11,7 @@ class ImageCampaign extends Pivot
         'image_id',
         'campaign_id',
         'cover',
-        'path'
+        'path',
     ];
 
     public function getUrlAttribute()

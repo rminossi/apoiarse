@@ -58,17 +58,8 @@
                                     <textarea name="description" cols="30" rows="10" class="mce">{{ old('description') }}</textarea>
                                 </label>
                             </div>
-                            <div class="label_g2">
-                                <label class="label">
-                                    <span class="legend">*Tipo:</span>
-                                    <select name="type">
-                                        <option {{ (old('type') == 'sick' ? 'selected' : '') }} value="sick">Doença</option>
-                                        <option {{ (old('type') == 'residential-accident' ? 'selected' : '') }} value="residential-accident">Acidente Residencial</option>
-                                        <option {{ (old('type') == 'public-calamity' ? 'selected' : '') }} value="public-calamity">Calamidade Pública</option>
-                                        <option {{ (old('type') == 'other' ? 'selected' : '') }} value="other">Outro</option>
-                                    </select>
-                                </label>
-                            </div>
+                            <input type="hidden" name="type" value="other">
+                            @include('admin.campaigns.partials.extra-fields', ['categories' => $categories ?? []])
                             <div class="label_g2">
                                 <label class="label mr-2">
                                     <span class="legend">Meta (R$) - deixar em branco para sem limite:</span>

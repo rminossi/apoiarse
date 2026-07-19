@@ -1,21 +1,29 @@
-		<!-- fh5co-blog-section -->
-		<footer>
-			<div id="footer">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-6 col-md-offset-3 text-center">
-							<p class="fh5co-social-icons">
-								<a target="_blank" href="https://api.whatsapp.com/send?phone=5551980436739"><i class="icon-whatsapp"></i></a>
-								<a target="_blank" href="https://www.instagram.com/apoiarse.online"><i class="icon-instagram"></i></a>
-							</p>
-							<p>&copy; <?= date("Y"); ?> - Todos os direitos reservados. <br>Desenvolvido por <a href="https://twitter.com/rminossi" target="_blank">Rafael Minossi</a></p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</footer>
-		</div>
-		</div>
-		</body>
-
-		</html>
+<footer class="border-t border-stone-200 bg-stone-900 text-stone-300">
+    <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div class="grid gap-8 md:grid-cols-3">
+            <div>
+                <img src="{{ asset('assets/frontend/images/apoiarse_logo.png') }}" alt="Apoiar-se" class="h-8 brightness-0 invert">
+                <p class="mt-4 text-sm text-stone-400">Plataforma de crowdfunding para causas que importam. Arrecade com segurança via PIX ou cartão.</p>
+            </div>
+            <div>
+                <h4 class="font-semibold text-white">Links</h4>
+                <ul class="mt-4 space-y-2 text-sm">
+                    <li><a href="{{ route('web.campaigns') }}" class="hover:text-white">Campanhas</a></li>
+                    <li><a href="{{ route('web.sobre') }}" class="hover:text-white">Sobre</a></li>
+                    <li><a href="{{ route('web.contato') }}" class="hover:text-white">Contato</a></li>
+                    <li><a href="{{ route('usuario.campanhas.create') }}" class="hover:text-white">Criar campanha</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-white">Redes</h4>
+                <div class="mt-4 flex gap-4">
+                    <a href="https://api.whatsapp.com/send?phone=5551980436739" target="_blank" rel="noopener" class="hover:text-white">WhatsApp</a>
+                    <a href="https://www.instagram.com/apoiarse.online" target="_blank" rel="noopener" class="hover:text-white">Instagram</a>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8 border-t border-stone-800 pt-8 text-center text-sm text-stone-500">
+            &copy; {{ date('Y') }} Apoiar-se. Todos os direitos reservados.
+        </div>
+    </div>
+</footer>

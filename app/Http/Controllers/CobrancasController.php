@@ -3,76 +3,85 @@
 namespace App\Http\Controllers;
 
 use App\Models\Donation;
-use App\Services\AsaasService;
 use App\Services\MercadoPagoService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class CobrancasController extends Controller
 {
-    private $donation;
-    private $mpService;
-    private $asaasService;
+    public function __construct(
+        private MercadoPagoService $mpService
+    ) {}
 
-    public function __construct()
+    public function webhook(Request $request): JsonResponse
     {
-        $this->mpService = new MercadoPagoService();
-        $this->asaasService = new AsaasService();
-        $this->donation = new Donation();
-    }
+        $asaasToken = config('payments.asaas.webhook_token');
 
-    //receive webhook
-    public function webhook(Request $request): void
-    {
-        $event = $request->event;
+        if ($request->header('asaas-access-token') && $asaasToken) {
+            if ($request->header('asaas-access-token') !== $asaasToken) {
+                Log::warning('Webhook Asaas rejeitado: token inválido');
 
-        if (isset($event)) {
-            if ($event == 'PAYMENT_CONFIRMED') {
-                $this->marcarCobrancaAsaasComoRecebida($request->payment);
-            } elseif ($event == 'PAYMENT_OVERDUE') {
-                $this->marcarCobrancaAsaasComoVencida($request->payment);
+                return response()->json(['error' => 'Unauthorized'], 401);
             }
-        } else {
-            if (isset($request->data_id)) {
-                $cobranca = $this->mpService->getPayment($request->data_id);
 
-                if ($cobranca['status'] == 'approved') {
-                    Log::debug($cobranca);
-                    Log::debug($request);
-                    $this->marcarCobrancaMPComoRecebida($request->data_id);
-                } elseif ($cobranca['status'] == 'cancelled') {
-                    $this->marcarCobrancaMPComoVencida($request->data_id);
-                }
-            }
+            return $this->handleAsaasWebhook($request);
         }
+
+        $paymentId = $request->input('data.id')
+            ?? $request->input('data_id')
+            ?? $request->input('id');
+
+        if ($paymentId) {
+            return $this->handleMercadoPagoWebhook($paymentId);
+        }
+
+        Log::warning('Webhook recebido com formato desconhecido', ['payload' => $request->all()]);
+
+        return response()->json(['status' => 'ignored'], 200);
     }
 
-    private function marcarCobrancaAsaasComoRecebida(mixed $payment): void
+    private function handleAsaasWebhook(Request $request): JsonResponse
     {
-        $this->donation
-            ->where('asaas_operation_id', $payment['id'])
-            ->update(['status' => 3]);
+        $event = $request->input('event');
+        $payment = $request->input('payment');
+
+        if (! $event || ! $payment || ! isset($payment['id'])) {
+            return response()->json(['status' => 'ignored'], 200);
+        }
+
+        if ($event === 'PAYMENT_CONFIRMED') {
+            $this->updateDonationStatus('asaas_operation_id', $payment['id'], 3);
+        } elseif ($event === 'PAYMENT_OVERDUE' || $event === 'PAYMENT_DELETED') {
+            $this->updateDonationStatus('asaas_operation_id', $payment['id'], 2);
+        }
+
+        return response()->json(['status' => 'ok'], 200);
     }
 
-    private function marcarCobrancaAsaasComoVencida(mixed $payment): void
+    private function handleMercadoPagoWebhook(string $paymentId): JsonResponse
     {
-        $this->donation
-            ->where('asaas_operation_id', $payment['id'])
-            ->update(['status' => 2]);
+        try {
+            $cobranca = $this->mpService->getPayment($paymentId);
+        } catch (\Exception $e) {
+            Log::error('Erro ao consultar pagamento MP', ['id' => $paymentId, 'error' => $e->getMessage()]);
+
+            return response()->json(['error' => 'Payment lookup failed'], 422);
+        }
+
+        if (($cobranca['status'] ?? '') === 'approved') {
+            $this->updateDonationStatus('mp_operation_id', $paymentId, 3);
+        } elseif (in_array($cobranca['status'] ?? '', ['cancelled', 'rejected'], true)) {
+            $this->updateDonationStatus('mp_operation_id', $paymentId, 2);
+        }
+
+        return response()->json(['status' => 'ok'], 200);
     }
 
-    private function marcarCobrancaMPComoRecebida(mixed $transaction_id): void
+    private function updateDonationStatus(string $column, mixed $operationId, int $status): void
     {
-        Log::debug($transaction_id);
-        $this->donation
-            ->where('mp_operation_id', $transaction_id)
-            ->update(['status' => 3]);
-    }
-
-    private function marcarCobrancaMPComoVencida(mixed $transaction_id): void
-    {
-        $this->donation
-            ->where('mp_operation_id', $transaction_id)
-            ->update(['status' => 2]);
+        Donation::where($column, $operationId)
+            ->where('status', '!=', $status)
+            ->update(['status' => $status]);
     }
 }

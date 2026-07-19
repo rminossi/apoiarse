@@ -8,7 +8,7 @@ class Image extends Model
 {
     protected $fillable = [
         'original_name',
-        'path'
+        'path',
     ];
 
     public function campaigns()

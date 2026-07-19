@@ -18,7 +18,6 @@ $(function () {
       const password = form.find('input[name="password"]').val();
       const password_confirmation = form.find('input[name="password_confirmation"]').val();
       $.post(action, {name: name, email: email, phone: phone, cpf: cpf, password: password, password_confirmation: password_confirmation}, function (response) {
-          console.log(response)
           if(response.message) {
               ajaxMessage(response.message, 3)
           }
