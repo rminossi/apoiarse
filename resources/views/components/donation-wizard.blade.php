@@ -5,7 +5,7 @@
 @endphp
 
 <div x-data="donationWizard({{ $campaign->id }}, {{ Auth::check() ? 'true' : 'false' }}, '{{ $loginUrl }}')"
-     class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-stone-200">
+     class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-stone-200 sm:p-6">
     @if($campaign->status != 1)
         <p class="text-center text-stone-600">Esta campanha não está mais recebendo doações.</p>
     @else

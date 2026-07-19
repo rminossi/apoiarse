@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
 @section('content')
-<div class="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
+<div class="page-container py-8 sm:py-10">
     <h1 class="section-title">Minhas doações</h1>
     <p class="section-subtitle">Histórico das campanhas que você apoiou</p>
 

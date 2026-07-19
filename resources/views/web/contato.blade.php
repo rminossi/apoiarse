@@ -1,7 +1,8 @@
 @extends('layouts.public')
 
 @section('content')
-<div class="mx-auto max-w-xl px-4 py-10 sm:px-6 lg:px-8">
+<div class="page-container py-8 sm:py-10">
+    <div class="mx-auto w-full max-w-xl">
     <h1 class="section-title">Contato</h1>
     <p class="section-subtitle">Envie sua mensagem e responderemos o mais breve possível.</p>
 
@@ -29,6 +30,7 @@
         @if($site->phone)<p>Telefone: {{ $site->phone }}</p>@endif
     </div>
     @endif
+    </div>
 </div>
 @endsection
 

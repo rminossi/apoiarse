@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
 @section('content')
-<div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+<div class="page-container py-8 sm:py-10">
     <div class="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
         <img src="{{ $creator->avatar_url }}" alt="{{ $creator->name }}" class="h-24 w-24 rounded-full ring-4 ring-brand-100">
         <div class="text-center sm:text-left">
