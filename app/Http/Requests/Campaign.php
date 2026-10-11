@@ -31,6 +31,11 @@ class Campaign extends FormRequest
         if (Auth::user()?->is_admin) {
             $rules['is_featured'] = 'boolean';
             $rules['featured_order'] = 'nullable|integer|min:0';
+            $rules['fee_mode'] = 'nullable|in:standard,gateway_only';
+            $rules['split_payout_enabled'] = 'boolean';
+        } else {
+            $rules['request_gateway_only'] = 'boolean';
+            $rules['request_split_payout'] = 'boolean';
         }
 
         return $rules;

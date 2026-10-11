@@ -9,12 +9,16 @@ use App\Models\Donation;
 use App\Models\Site;
 use App\Models\SiteContent;
 use App\Models\User;
+use App\Exceptions\InvalidDonationAmountException;
 use App\Services\AsaasService;
+use App\Services\DonationFeeCalculator;
+use App\Services\PaymentSettingsService;
 use App\Support\Message;
 use App\Support\Seo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
@@ -54,7 +58,7 @@ class WebController extends Controller
             ->get();
 
         $stats = [
-            'total_raised' => Donation::where('status', 3)->sum('amount'),
+            'total_raised' => Donation::where('status', 3)->sum(DB::raw('COALESCE(net_amount, amount)')),
             'active_campaigns' => Campaign::active()->count(),
             'supporters' => Donation::where('status', 3)->distinct('user_id')->count('user_id'),
         ];
@@ -139,7 +143,31 @@ class WebController extends Controller
 
         $supporters = $campaign->donations()->where('status', 3)->with('user')->latest()->get();
 
-        return view('web.campaign', compact('head', 'campaign', 'supporters', 'confirmed'));
+        $paymentSettings = app(PaymentSettingsService::class)->get();
+
+        return view('web.campaign', compact('head', 'campaign', 'supporters', 'confirmed', 'paymentSettings'));
+    }
+
+    public function feePreview(Request $request, string $slug, DonationFeeCalculator $feeCalculator)
+    {
+        $validated = $request->validate([
+            'amount' => 'required|numeric|min:0.01',
+            'method' => 'required|in:pix,card',
+        ]);
+
+        $campaign = Campaign::where('slug', $slug)->firstOrFail();
+
+        try {
+            $result = $feeCalculator->calculate(
+                (float) $validated['amount'],
+                $validated['method'],
+                $campaign
+            );
+
+            return response()->json($result);
+        } catch (InvalidDonationAmountException $e) {
+            return response()->json(['error' => $e->getMessage()], 422);
+        }
     }
 
     public function contato()
@@ -159,6 +187,7 @@ class WebController extends Controller
     {
         $faq = SiteContent::get('faq', []);
         $howItWorks = SiteContent::get('how_it_works', []);
+        $paymentSettings = app(PaymentSettingsService::class)->get();
 
         $head = $this->seo->render(
             'Sobre - Apoiar-se Online',
@@ -167,7 +196,7 @@ class WebController extends Controller
             asset('assets/frontend/images/apoiarse_logo.png')
         );
 
-        return view('web.sobre', compact('head', 'faq', 'howItWorks'));
+        return view('web.sobre', compact('head', 'faq', 'howItWorks', 'paymentSettings'));
     }
 
     public function enviarContato(Request $request)

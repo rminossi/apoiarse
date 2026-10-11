@@ -22,6 +22,21 @@
     </section>
     @endif
 
+    @if(isset($paymentSettings))
+    <section class="mt-12">
+        <h2 class="text-xl font-semibold text-stone-900">Taxas e modalidades</h2>
+        <p class="mt-3 text-sm text-stone-600">{{ $paymentSettings->public_fee_intro }}</p>
+        <ul class="mt-4 list-disc space-y-2 pl-5 text-sm text-stone-700">
+            <li>Modalidade padrão: comissão de {{ number_format($paymentSettings->platform_fee_percent, 2, ',', '.') }}% da plataforma + taxas do meio de pagamento.</li>
+            <li>Modalidade somente gateway: disponível mediante solicitação e aprovação — sem comissão da plataforma.</li>
+            <li>Repasse automático (split Asaas): opcional por campanha, após análise e cadastro de carteira do criador.</li>
+        </ul>
+        @if($paymentSettings->public_fee_footnote)
+            <p class="mt-3 text-xs text-stone-500">{{ $paymentSettings->public_fee_footnote }}</p>
+        @endif
+    </section>
+    @endif
+
     @if(!empty($faq))
     <section class="mt-12" x-data="{ open: null }">
         <h2 class="text-xl font-semibold text-stone-900">Perguntas frequentes</h2>

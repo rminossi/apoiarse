@@ -31,6 +31,7 @@
                         <p class="icon-asterisk">{{ session()->get('message') }}</p>
                     </div>
                 @endif
+                @include('admin.campaigns.partials.fee-review', ['campaign' => $campaign])
                 <ul class="nav_tabs" style="flex-flow: row">
                     <li class="nav_tabs_item">
                         <a href="#data" class="nav_tabs_item_link active">Dados da Campanha</a>
@@ -67,6 +68,7 @@
                                 <input type="hidden" name="type" value="{{ old('type', $campaign->type ?? 'other') }}">
                             </div>
                             @include('admin.campaigns.partials.extra-fields', ['categories' => $categories ?? []])
+                            @include('admin.campaigns.partials.fee-admin-fields', ['campaign' => $campaign])
                             <div class="label_g2">
                                 <label class="label mr-2">
                                     <span class="legend">Meta (R$) - deixar em branco para sem limite:</span>
@@ -121,6 +123,8 @@
                                         <th>Nome Completo</th>
                                         <th>Campanha</th>
                                         <th>Valor</th>
+                                        <th>Líquido</th>
+                                        <th>Taxas</th>
                                         <th>Data</th>
                                     </tr>
                                     </thead>
@@ -131,6 +135,8 @@
                                             <td>{{$donation->user->name}}</td>
                                             <td>{{$donation->campaign->title}}</td>
                                             <td>{{$donation->amount}}</td>
+                                            <td>{{ $donation->net_amount ?? '—' }}</td>
+                                            <td>P: {{ $donation->platform_fee ?? '—' }} / G: {{ $donation->gateway_fee ?? '—' }}</td>
                                             <td>{{$donation->created_at}}</td>
                                         </tr>
                                     @endforeach

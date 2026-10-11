@@ -12,14 +12,7 @@
                 <x-share-buttons :url="route('web.campaign', $campaign->slug)" :title="$campaign->title" class="mt-4" />
             </div>
 
-            <div class="rounded-xl bg-brand-50 p-4 ring-1 ring-brand-100 sm:p-6">
-                <h3 class="font-semibold text-brand-800">Pagamento seguro</h3>
-                <ul class="mt-3 space-y-2 text-sm text-brand-700">
-                    <li>✓ PIX instantâneo</li>
-                    <li>✓ Cartão de crédito</li>
-                    <li>✓ Plataforma verificada</li>
-                </ul>
-            </div>
+            <x-campaign-fee-disclosure :campaign="$campaign" :payment-settings="$paymentSettings" />
         </div>
 
         {{-- Main content --}}

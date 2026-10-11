@@ -34,6 +34,11 @@
                         </div>
                         <div class="realty_list_item_content">
                             <h4><a href="/campanhas/{{$campaign->slug}}" class="text-orange" target="_blank">{{$campaign->title}}</a></h4>
+                            @if($campaign->hasPendingFeeReview())
+                                <p class="text-orange text-sm">Aguardando análise de taxas/repasse</p>
+                            @elseif($campaign->fee_mode === 'gateway_only')
+                                <p class="text-green text-sm">Modalidade: somente taxas do gateway</p>
+                            @endif
                             <div class="realty_list_item_card">
                                 <div class="realty_list_item_card_image">
                                     <span class="icon-money"></span>

@@ -60,6 +60,7 @@
                                               id="mytextarea">{{old('description') ?? $campaign->description}}</textarea>
                                 </label>
                             </div>
+                            @include('admin.campaigns.partials.fee-request-fields', ['paymentSettings' => $paymentSettings ?? null, 'campaign' => $campaign])
                             <div class="label_g3">
                                 <label class="label">
                                     <span class="legend">*Tipo:</span>

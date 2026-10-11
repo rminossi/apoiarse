@@ -19,6 +19,21 @@ class Donation extends Model
         'status',
         'pix_qrcode',
         'pix_key',
+        'gateway',
+        'platform_fee',
+        'gateway_fee',
+        'net_amount',
+        'fee_mode_applied',
+        'split_applied',
+        'fee_breakdown',
+    ];
+
+    protected $casts = [
+        'platform_fee' => 'float',
+        'gateway_fee' => 'float',
+        'net_amount' => 'float',
+        'split_applied' => 'boolean',
+        'fee_breakdown' => 'array',
     ];
 
     public function user()

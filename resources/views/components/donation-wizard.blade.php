@@ -4,7 +4,7 @@
     $loginUrl = route('sessao.login', ['redirect' => route('web.campaign', $campaign->slug)]);
 @endphp
 
-<div x-data="donationWizard({{ $campaign->id }}, {{ Auth::check() ? 'true' : 'false' }}, '{{ $loginUrl }}')"
+<div x-data="donationWizard({{ $campaign->id }}, '{{ $campaign->slug }}', {{ Auth::check() ? 'true' : 'false' }}, '{{ $loginUrl }}', '{{ route('web.campaign.fee-preview', $campaign->slug) }}')"
      class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-stone-200 sm:p-6">
     @if($campaign->status != 1)
         <p class="text-center text-stone-600">Esta campanha não está mais recebendo doações.</p>
@@ -33,6 +33,14 @@
                 <input type="text" x-model="amountDisplay" @input="parseAmount"
                        class="input-field mt-1" placeholder="R$ 0,00">
             </div>
+            <template x-if="feeSummary">
+                <div class="mt-4 rounded-lg bg-stone-50 p-3 text-xs text-stone-600">
+                    <p class="font-semibold text-stone-800">Estimativa (PIX)</p>
+                    <p>Campanha recebe ~ R$ <span x-text="formatMoney(feeSummary.net_amount)"></span></p>
+                    <p>Taxas: gateway ~ R$ <span x-text="formatMoney(feeSummary.gateway_fee)"></span>,
+                        plataforma ~ R$ <span x-text="formatMoney(feeSummary.platform_fee)"></span></p>
+                </div>
+            </template>
             <button type="button" @click="nextStep()" class="btn-primary mt-6 w-full">Continuar</button>
         </div>
 
@@ -64,6 +72,13 @@
                     </div>
                 </button>
             </div>
+            <template x-if="feeSummary && method">
+                <div class="mt-4 rounded-lg bg-stone-50 p-3 text-xs text-stone-600">
+                    <p class="font-semibold">Estimativa para <span x-text="method === 'pix' ? 'PIX' : 'cartão'"></span></p>
+                    <p>Líquido campanha ~ R$ <span x-text="formatMoney(feeSummary.net_amount)"></span></p>
+                    <p class="mt-1 text-stone-500">Valores finais conforme confirmação do pagamento.</p>
+                </div>
+            </template>
             <div class="mt-6 flex gap-2">
                 <button type="button" @click="step = 1" class="btn-secondary flex-1">Voltar</button>
                 <button type="button" @click="processPayment()" :disabled="!method || loading"
@@ -126,7 +141,7 @@
 @push('scripts')
 <script>
 document.addEventListener('alpine:init', () => {
-    Alpine.data('donationWizard', (campaignId, loggedIn, loginUrl) => ({
+    Alpine.data('donationWizard', (campaignId, campaignSlug, loggedIn, loginUrl, feePreviewUrl) => ({
         step: 1,
         amount: 50,
         amountDisplay: 'R$ 50,00',
@@ -134,6 +149,8 @@ document.addEventListener('alpine:init', () => {
         loading: false,
         loggedIn,
         loginUrl,
+        feePreviewUrl,
+        feeSummary: null,
         pixImage: '',
         pixCode: '',
         cardStatus: 'pending',
@@ -149,17 +166,40 @@ document.addEventListener('alpine:init', () => {
             this.amount = parseInt(v, 10) / 100;
         },
 
-        nextStep() {
+        formatMoney(v) {
+            if (v == null) return '0,00';
+            return Number(v).toFixed(2).replace('.', ',');
+        },
+
+        async refreshFeePreview(method = 'pix') {
+            const token = document.querySelector('meta[name="csrf-token"]').content;
+            try {
+                const res = await fetch(this.feePreviewUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': token, 'Accept': 'application/json' },
+                    body: JSON.stringify({ amount: this.amount, method }),
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Erro ao calcular taxas');
+                this.feeSummary = data;
+            } catch (e) {
+                this.feeSummary = null;
+            }
+        },
+
+        async nextStep() {
             if (this.amount <= 0) {
                 window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Informe um valor válido.', type: 'error' } }));
                 return;
             }
+            await this.refreshFeePreview('pix');
             this.step = 2;
         },
 
-        selectMethod(m) {
+        async selectMethod(m) {
             if (!this.loggedIn) return;
             this.method = m;
+            await this.refreshFeePreview(m === 'pix' ? 'pix' : 'card');
         },
 
         formatAmountForApi() {

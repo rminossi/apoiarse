@@ -24,12 +24,21 @@ class Campaign extends Model
         'is_featured',
         'featured_order',
         'end_date',
+        'fee_mode',
+        'fee_mode_request',
+        'split_payout_enabled',
+        'split_payout_request',
+        'fee_reviewed_at',
+        'fee_reviewed_by',
+        'fee_review_notes',
     ];
 
     protected $casts = [
         'is_featured' => 'boolean',
         'end_date' => 'date',
         'featured_order' => 'integer',
+        'split_payout_enabled' => 'boolean',
+        'fee_reviewed_at' => 'datetime',
     ];
 
     protected $appends = [
@@ -84,6 +93,35 @@ class Campaign extends Model
         return $query->where('is_featured', true)->orderBy('featured_order');
     }
 
+    public function scopePendingFeeReview($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('fee_mode_request', 'pending')
+                ->orWhere('split_payout_request', 'pending');
+        });
+    }
+
+    public function feeReviewer()
+    {
+        return $this->belongsTo(User::class, 'fee_reviewed_by');
+    }
+
+    public function effectiveFeeMode(): string
+    {
+        return $this->fee_mode === 'gateway_only' ? 'gateway_only' : 'standard';
+    }
+
+    public function splitPayoutActive(): bool
+    {
+        return (bool) $this->split_payout_enabled;
+    }
+
+    public function hasPendingFeeReview(): bool
+    {
+        return $this->fee_mode_request === 'pending'
+            || $this->split_payout_request === 'pending';
+    }
+
     public function cover()
     {
         $cover = $this->images()->where('cover', 1)->first();
@@ -130,14 +168,21 @@ class Campaign extends Model
 
     public function getTotalDonationsAttribute()
     {
-        $value = $this->donations()->where('status', 3)->sum('amount');
+        $value = $this->raisedNetSum();
 
         return number_format($value, '2', ',', '.');
     }
 
     public function getAmountRaisedRawAttribute()
     {
-        return (float) $this->donations()->where('status', 3)->sum('amount');
+        return $this->raisedNetSum();
+    }
+
+    public function raisedNetSum(): float
+    {
+        return (float) $this->donations()
+            ->where('status', 3)
+            ->sum(\Illuminate\Support\Facades\DB::raw('COALESCE(net_amount, amount)'));
     }
 
     public function getNumberOfDonationsAttribute()

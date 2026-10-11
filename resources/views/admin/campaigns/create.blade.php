@@ -67,6 +67,7 @@
                                 </label>
                             </div>
                             @include('admin.campaigns.partials.extra-fields', ['categories' => $categories ?? []])
+                            @include('admin.campaigns.partials.fee-admin-fields', ['campaign' => null])
                             <div class="label_g2">
                                 <label class="label mr-2">
                                     <span class="legend">Meta (R$) - deixar em branco para sem limite:</span>

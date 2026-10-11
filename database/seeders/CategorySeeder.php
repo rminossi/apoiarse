@@ -52,7 +52,7 @@ class CategorySeeder extends Seeder
             ['value' => [
                 ['question' => 'Como funciona o Apoiar-se?', 'answer' => 'Você cria uma campanha, compartilha com sua rede e recebe doações via PIX ou cartão de forma segura.'],
                 ['question' => 'Quanto tempo leva para receber?', 'answer' => 'Doações via PIX são confirmadas em segundos. Cartão pode levar alguns minutos para confirmação.'],
-                ['question' => 'A plataforma cobra taxas?', 'answer' => 'Consulte nossos termos de uso para informações sobre taxas de processamento de pagamento.'],
+                ['question' => 'A plataforma cobra taxas?', 'answer' => 'Na modalidade padrão há comissão da plataforma mais taxas do PIX ou cartão. Campanhas aprovadas na modalidade somente gateway pagam apenas as taxas do meio de pagamento. Veja valores atualizados na página Sobre e em cada campanha.'],
             ]]
         );
 

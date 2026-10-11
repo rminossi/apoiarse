@@ -17,6 +17,7 @@ class CampaignRedesignTest extends TestCase
     {
         parent::setUp();
         $this->seed(\Database\Seeders\CategorySeeder::class);
+        $this->seed(\Database\Seeders\PaymentSettingsSeeder::class);
     }
 
     public function test_home_page_loads_with_redesign(): void

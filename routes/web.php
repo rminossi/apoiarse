@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\CampaignFeeReviewController;
 use App\Http\Controllers\CampaignUpdateController;
+use App\Http\Controllers\PaymentSettingsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CreatorController;
 use App\Http\Controllers\DonationController;
@@ -23,6 +25,9 @@ Route::group(['namespace' => 'Web', 'as' => 'web.'], function () {
     Route::get('/', [WebController::class, 'home'])->name('home');
     Route::get('/campanhas', [WebController::class, 'campaigns'])->name('campaigns');
     Route::get('/campanhas/{slug}', [WebController::class, 'campaign'])->name('campaign');
+    Route::post('/campanhas/{slug}/taxas-preview', [WebController::class, 'feePreview'])
+        ->middleware('throttle:30,1')
+        ->name('campaign.fee-preview');
     Route::get('/contato', [WebController::class, 'contato'])->name('contato');
     Route::get('/sobre', [WebController::class, 'sobre'])->name('sobre');
     Route::get('/criadores/{slug}', [CreatorController::class, 'show'])->name('creator');
@@ -41,6 +46,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::group(['middleware' => ['auth']], function () {
         Route::get('home', [AuthController::class, 'home'])->name('home');
         Route::resource('site', SiteController::class)->only(['edit', 'update']);
+        Route::get('payment-settings', [PaymentSettingsController::class, 'edit'])->name('payment-settings.edit');
+        Route::put('payment-settings', [PaymentSettingsController::class, 'update'])->name('payment-settings.update');
+        Route::post('campaigns/{campaign}/review-fee-mode', [CampaignFeeReviewController::class, 'reviewFeeMode'])->name('campaigns.review-fee-mode');
+        Route::post('campaigns/{campaign}/review-split-payout', [CampaignFeeReviewController::class, 'reviewSplitPayout'])->name('campaigns.review-split-payout');
         Route::resource('users', UserController::class);
         Route::resource('categories', CategoryController::class)->except(['show']);
         Route::resource('campaigns', CampaignController::class);

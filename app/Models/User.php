@@ -22,6 +22,7 @@ class User extends Authenticatable
         'avatar',
         'public_slug',
         'asaas_id',
+        'asaas_wallet_id',
         'api_token',
         'password_reset_token',
         'last_login_at',

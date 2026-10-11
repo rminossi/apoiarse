@@ -6,6 +6,7 @@ use App\Http\Requests\Campaign as CampaignRequest;
 use App\Models\Campaign;
 use App\Models\Image;
 use App\Models\ImageCampaign;
+use App\Services\PaymentSettingsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,6 +25,9 @@ class CampaignController extends Controller
         }
         if ($request->filled('status')) {
             $query->where('status', $request->status);
+        }
+        if ($request->boolean('fee_review_pending')) {
+            $query->pendingFeeReview();
         }
         if ($request->filled('user_id')) {
             $query->where('user_id', $request->user_id);
@@ -63,16 +67,17 @@ class CampaignController extends Controller
 
     }
 
-    public function create()
+    public function create(PaymentSettingsService $paymentSettingsService)
     {
         $user = auth()->user();
         $categories = \App\Models\Category::active()->get();
+        $paymentSettings = $paymentSettingsService->get();
 
         if ($user->is_admin) {
-            return view('admin.campaigns.create', compact('categories'));
+            return view('admin.campaigns.create', compact('categories', 'paymentSettings'));
         }
 
-        return view('users.campaigns.create', compact('categories'));
+        return view('users.campaigns.create', compact('categories', 'paymentSettings'));
     }
 
     public function store(CampaignRequest $request)
@@ -83,7 +88,9 @@ class CampaignController extends Controller
         if ($request->request->get('goal') != null) {
             $request->request->set('goal', str_replace(',', '.', str_replace('.', '', $request->request->get('goal'))));
         }
-        $campaign = Campaign::create($request->all());
+
+        $attributes = $this->campaignAttributesFromRequest($request, $user);
+        $campaign = Campaign::create($attributes);
         $request->request->add(['campaign_id' => $campaign->id]);
         $campaign->setSlug();
 
@@ -119,7 +126,7 @@ class CampaignController extends Controller
         ])->with(['message' => 'Campaign cadastrada com sucesso!']);
     }
 
-    public function edit($id)
+    public function edit($id, PaymentSettingsService $paymentSettingsService)
     {
         $campaign = Campaign::findOrFail($id);
         $this->authorizeCampaignAccess($campaign);
@@ -127,6 +134,7 @@ class CampaignController extends Controller
         $user = auth()->user();
         $categories = \App\Models\Category::active()->get();
         $updates = $campaign->updates()->with('user')->get();
+        $paymentSettings = $paymentSettingsService->get();
 
         if ($user->is_admin) {
             return view('admin.campaigns.edit', [
@@ -134,6 +142,7 @@ class CampaignController extends Controller
                 'donations' => $donations,
                 'categories' => $categories,
                 'updates' => $updates,
+                'paymentSettings' => $paymentSettings,
             ]);
         }
 
@@ -142,6 +151,7 @@ class CampaignController extends Controller
             'donations' => $donations,
             'categories' => $categories,
             'updates' => $updates,
+            'paymentSettings' => $paymentSettings,
         ]);
     }
 
@@ -177,7 +187,8 @@ class CampaignController extends Controller
                 $request->request->set('goal', str_replace(',', '.', str_replace('.', '', $request->request->get('goal'))));
             }
 
-            $campaign->update($request->all());
+            $attributes = $this->campaignAttributesFromRequest($request, $user, $campaign);
+            $campaign->update($attributes);
         } catch (\Exception $e) {
             if ($user->is_admin) {
                 return redirect()->route('admin.campaigns.edit', [
@@ -258,5 +269,40 @@ class CampaignController extends Controller
         if (! $user->is_admin && (int) $campaign->user_id !== (int) $user->id) {
             abort(403, 'Acesso não autorizado a esta campanha.');
         }
+    }
+
+    private function campaignAttributesFromRequest(Request $request, $user, ?Campaign $campaign = null): array
+    {
+        $fields = [
+            'title', 'description', 'short_description', 'type', 'category_id',
+            'goal', 'status', 'user_id', 'end_date',
+        ];
+
+        if ($user->is_admin) {
+            $fields = array_merge($fields, ['is_featured', 'featured_order', 'fee_mode', 'split_payout_enabled']);
+        }
+
+        $attributes = $request->only($fields);
+
+        if (! $user->is_admin) {
+            if ($request->boolean('request_gateway_only') && $campaign?->fee_mode_request !== 'approved') {
+                $attributes['fee_mode_request'] = 'pending';
+                $attributes['fee_mode'] = 'standard';
+                $attributes['status'] = 2;
+            }
+
+            if ($request->boolean('request_split_payout') && $campaign?->split_payout_request !== 'approved') {
+                $attributes['split_payout_request'] = 'pending';
+            }
+
+            unset($attributes['fee_mode'], $attributes['split_payout_enabled']);
+        } else {
+            $attributes['split_payout_enabled'] = $request->boolean('split_payout_enabled');
+            if ($request->filled('fee_mode')) {
+                $attributes['fee_mode'] = $request->input('fee_mode');
+            }
+        }
+
+        return $attributes;
     }
 }

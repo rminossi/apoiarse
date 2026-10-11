@@ -60,19 +60,13 @@
                             </div>
                             <input type="hidden" name="type" value="other">
                             @include('admin.campaigns.partials.extra-fields', ['categories' => $categories ?? []])
+                            @include('admin.campaigns.partials.fee-request-fields', ['paymentSettings' => $paymentSettings ?? null])
+                            <input type="hidden" name="status" value="1">
                             <div class="label_g2">
                                 <label class="label mr-2">
                                     <span class="legend">Meta (R$) - deixar em branco para sem limite:</span>
                                     <input type="text" class="mask-money" name="goal" placeholder="Ex: R$ 1.000,00"
                                            value="{{old('goal')}}"/>
-                                </label>
-                                <label class="label">
-                                    <span class="legend">*Status:</span>
-                                    <select name="status">
-                                        <option value="1" {{ (old('status') == '1' ? 'selected' : '') }}>Ativo</option>
-                                        <option value="2" {{ (old('status') == '2' ? 'selected' : '') }}>Inativo</option>
-                                        <option value="3" {{ (old('status') == '3' ? 'selected' : '') }}>Encerrado</option>
-                                    </select>
                                 </label>
                             </div>
                         </div>

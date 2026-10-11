@@ -46,6 +46,11 @@
                 </select>
             </label>
 
+            <label>
+                <input type="checkbox" name="fee_review_pending" value="1" @checked(request()->boolean('fee_review_pending'))>
+                Aguardando revisão de taxas
+            </label>
+
             <button class="btn btn-block btn-large btn-green icon-search">Filtrar</button>
         </form>
     </main>

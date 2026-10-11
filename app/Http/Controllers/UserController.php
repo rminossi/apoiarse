@@ -68,6 +68,7 @@ class UserController extends Controller
             'bio' => 'nullable|string|max:2000',
             'public_slug' => 'nullable|string|max:100|unique:users,public_slug,'.$user->id,
             'is_admin' => 'boolean',
+            'asaas_wallet_id' => 'nullable|string|max:255',
         ]);
 
         $data = collect($validated)->except(['password', 'password_confirmation'])->toArray();

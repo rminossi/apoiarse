@@ -47,13 +47,14 @@ class AsaasService
         ]);
     }
 
-    public function getPixQrCodeAsaas($user, float|int $valor): mixed
+    public function getPixQrCodeAsaas($user, float|int $valor, array $split = []): mixed
     {
         $cobranca = $this->criarCobrancaPix(
             $user->asaas_id,
             $valor,
             'Apoiar-se Online',
-            now()->addDays(1)->format('Y-m-d')
+            now()->addDays(1)->format('Y-m-d'),
+            $split
         );
         $qrCode = $this->gerarPixQrCode($cobranca['id']);
         $qrCode['qrCode'] = $qrCode['payload'];
@@ -69,15 +70,21 @@ class AsaasService
         return $this->request('POST', '/payments/'.$id.'/pixQrCode');
     }
 
-    public function criarCobrancaPix($id, $valor, $descricao, $data_vencimento)
+    public function criarCobrancaPix($id, $valor, $descricao, $data_vencimento, array $split = [])
     {
-        return $this->request('POST', '/payments', [
+        $body = [
             'customer' => $id,
             'value' => $valor,
             'description' => $descricao,
             'billingType' => 'PIX',
             'dueDate' => $data_vencimento,
-        ]);
+        ];
+
+        if ($split !== []) {
+            $body['split'] = $split;
+        }
+
+        return $this->request('POST', '/payments', $body);
     }
 
     public function criarCobrancaCartao(
@@ -95,10 +102,11 @@ class AsaasService
         $cardPostalCode,
         $cardAddressNumber,
         $cardAddressComplement,
-        $remoteIp
+        $remoteIp,
+        array $split = []
     ) {
         try {
-            return $this->request('POST', '/payments', [
+            $body = [
                 'customer' => $asaas_id,
                 'billingType' => 'CREDIT_CARD',
                 'value' => $valor,
@@ -121,7 +129,13 @@ class AsaasService
                     'addressComplement' => $cardAddressComplement,
                 ],
                 'remoteIp' => $remoteIp,
-            ]);
+            ];
+
+            if ($split !== []) {
+                $body['split'] = $split;
+            }
+
+            return $this->request('POST', '/payments', $body);
         } catch (ClientException $e) {
             $response = $e->getResponse();
             if ($response) {
